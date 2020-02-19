@@ -19,4 +19,74 @@ Bit  tương ưng set lên 1 chân sẽ xuất dữ liệu hay mức điện áp
 b.thanh ghi : GPIOx->BSRR : thanh ghi 32 bit các bit 0 đến đến 15 sẽ để set các bit 0 đến 15 của thanh ghi GPIOx->ODR lên 1 các bit 16 đến 31 sử dụng  để reset các bit 0 đến 15
 c.thanh ghi GPIOx->ODR về 0 khi ghi giá trị 1 vào bit tương ưng thanh ghi GPIOx->BSRR nếu ghi giá trị 0 vào bit thanh ghi GPIOx->BSRR thì sẽ không có hiệu lực
 
-- Đọc trạng thái điện áp của 1 chân input ,thanh ghi GPIOx->IDR(x=A,B,C,...): Thanh ghi 32 bit từ bit 31 đến bit 16 dự trư không sử dụng, từ bit 0 đến 15 sử dụng để đọc điện áp  chân cấu hình input từ 0 đên 15 nếu đọc bit có giá trị 1 thi điện áp đầu vào chân có mức điện áp cao nếu là 0 thi điện áp đầu vào chân là mưc thấp :
+- Đọc trạng thái điện áp của 1 chân input ,thanh ghi GPIOx->IDR(x=A,B,C,...): Thanh ghi 32 bit từ bit 31 đến bit 16 dự trư không sử dụng, từ bit 0 đến 15 sử dụng để đọc điện áp  chân cấu hình input từ 0 đên 15 nếu đọc bit có giá trị 1 thi điện áp đầu vào chân có mức điện áp cao nếu là 0 thi điện áp đầu vào chân là mưc thấp.
+
+--------------------------------I2C--------------------------------------
+1.
+a.Đặc điểm:
+I2C – Inter- Intergrated Circuit là chuẩn truyền thông 2 dây gồm 1 dây Clock và 1 dây Data dùng chung cho quá trình truyền nhận. Khi giao tiếp I2C với 1 IC nào đó cần chú ý : địa chỉ của Ic đó để giao tiếp, giao tiếp với tốc độ bao nhiêu, bao nhiêu bit.
+Sử dụng hệ thống địa chỉ 7 bit để xác định một thiết bị / IC cụ thể trên bus I2C
+Chế độ chuẩn (standard mode) hoạt động ở tốc độ 100 Kbit/s.
+Chế độ tốc độ thấp (high-speed mode) hoạt động ở tốc độ 400 Kbit/s.
+b.Giao thức: Dữ liệu truyền giữa master và slave thông qua 1 đường SDA duy nhất
+- Ban đầu khi chưa thực hiện quá trình giao tiếp, cả hai đường SDA và SCL đều ở mức cao (SDA = SCL = HIGH). Lúc này bus I2C được coi là rỗi (“bus free”), sẵn sàng cho một giao tiếp. 
+- Điều kiện START: SDA 1->0 trong khi SCL vẫn ở mức cao
+-Khối địa chỉ: gồm 7 bit và lấp đầy với địa chỉ Slave đến / từ đó thiết bị master càn gửi/nhận dữ liệu. Cac thiết bị slave so sánh với địa chỉ của chúng
+- Bit read/write: xác định hướng truyền dữ liệu, bằng 1 gửi dữ liệu từ slave->master, bằng 0 gửi từ master->slave
+- Bit ACK/NACK: nếu địach chỉ slave nào trùng với địa chỉ master phát, bit này set = 0 bởi bên nhajan
+- Khối dữ liệu: bao gồm 8 bit thiết lập bởi bên gửi, khối này theo sau bởi 1 bit ACK/NACk
+- Điều kiện STOP: SDA->1 trong khi SCL vẫn ở mức cao
+
+2.Config I2C
+a. STM32F103C8T6 có 2 bộ chuyển đổi I2C với các tính năng được tóm tắt như sau:
+
+Có thể lập trình là Master hay Slave.
+Đối với Master: Tạo ra xung clock và tạo ra tín hiệu start, stop.
+Đối với Slave : Lập trình được địa chỉ của thiết bị I2C, chế độ kiểm tra bit stop.
+Số địa chỉ được sinh ra cũng như được kiểm tra là 7 bit hoặc 10 bit.
+Hỗ trợ 2 chuẩn tốc độ là 100khz và 400 Khz.
+Có bộ lọc nhiễu Analog.
+Tích hợp mode DMA.
+Có các cờ báo trạng thái : Nhận, truyền, kết thúc chuyển đổi, báo lỗi…
+Có các ngắt như: Ngắt buffer truyền, nhận; ngắt sự kiện, ngắt báo lỗi.
+
+b. VD: Cấu hình I2C master
+Tóm tắt quá trình truyền như sau:
+
+	- Đầu tiên bộ I2C sẽ tạo ra tín hiệu start đến EV5: SB = 1 (tạo ra điều kiện bắt đầu trên thanh ghi SR1)
+	- Sau đó gửi địa chỉ và hướng truyền
+	- Đợi bit ACK từ Slave truyền cho Master 
+	- Tiếp tục kiểm tra EV6: ADDR = 1(Master sẽ gởi địa chỉ của Slave và Slave nhận đúng chính xác địa chỉ của mình do Master gởi) – EV8.1: TxE=1 (hiện tại thì thanh ghi dịch và thanh ghi dữ liệu hiện đang trống) 
+	- Kiểm tra EV8 (lúc này dữ liệu thanh ghi dịch đã có và bắt đầu truyền đến Slave)
+	- Gửi Data đến thiết bị slave với địa chỉ truyền ở trên
+	- Nếu Slave nhận được dữ liệu sẽ trả về bit ACK cho Master để xác nhận đã dữ liệu
+	- Kiểm tra EV8_2 – tương ứng code là kiểm tra toàn bộ Data đã truyền xong chưa (TXE, BTF)
+	- Đợi truyền xong và bộ I2C sẽ tạo ra tín hiệu kết thúc.
+
+c. Thanh ghi
+- I2C_CR1: I2C control register 1
+	ACK : Cho phép nhận hoặc không nhận tín hiệu ACK return từ thiết bị được truyền.
+	STOP : Sinh ra tín hiệu stop kết thúc quá trình giao tiếp.
+	START : Sinh ra tín hiệu start để bắt đầu quá trình giao tiếp.
+	PE: Peripheral enable – bit này được bật lên bằng 1 khi quá trình giao tiếp I2C đang được thực hiện và kết thúc khi có tín hiện End communication.
+- I2C_CR2: 
+	ITBUFEN : Cho phép hoặc không cho phép xảy ra ngắt khi có Data trong truyền/nhận.
+	ITEVTEN : Cho phép ngắt khi xảy ra các sự kiện sau trên các bit sau: SB, ADDR, ADD10, STOPF, BTF , TxE, RxE.
+	ITERREN : Cho phép hoặc không cho phép xảy ra ngắt khi có lỗi xảy ra.
+	FREQ[5:0] : Bộ chia clock tần số được tính từ nhánh clock hệ thống chia cho bộ I2C.
+- I2C_DR: Data register chứa data quá trình truyền nhận
+- I2C_SR1: Status reg- chứa cờ báo trạng thái quá trình giao tiếp
+	TIME OUT: Báo hết thời gian đợi quá trình truyền nhận data.
+	PECERR: Chấp nhận lỗi PCE và phản hồi lại quá trình tín hiệu lỗi.
+	OVR : Báo quá trình overrun/ underrun.
+	AF: Báo tín hiệu ACK bị lỗi hay không.
+	TxE : Báo buffer truyền có trống hay không.
+	RxE : Báo buffer nhận có trống hay không.
+	STOPF : Cờ báo có kiểm tra quá trình stop hay không.
+	BTF: Báo truyền byte dữ liệu đã xong hay chưa.
+	ADDR: Báo địa chỉ đã được gửi(mode master) hay không tương thích (mode slave).
+	SB: Có sử dụng bit start hay không.
+- I2C_CCR: Clock control reg
+	F/S : Sử dụng mode Fast(400khz) hay Standard(100Khz).
+	DUTY: Chỉ sử dụng cho Fast mode với 2 chế độ .
+	CCR[11:0] : Thanh ghi chứa Clock control cho bộ , công thức chia tham khảo thêm trong reference manual.

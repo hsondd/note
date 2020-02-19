@@ -1,0 +1,22 @@
+-----------------------------GPIO------------------------------------
+1. GPIO có 7 port A-G và mỗi port có 16 pin
+2. Config GPIO:
+- GPIO cấp clock từ bus ABP2 tối đa 72M nhưng tối đa 50M.
+VD: Cho phep su dung gpioa, gpiob RCC->APB2ENR=(1<<2)|(1<<3);
+- Cấu hình các mode GPIO
++Input floating : cấu hình chân I/O là ngõ vào và để thả  nổi 2 khóa VDD, VSS đều mở  dữ liệu đầu vào sẽ được đã thăng vào trigger mode này sử dụng để phát hiện sườn clock  (chân nhận dữ liệu USART, SPI ... )
++Input pull-up : cấu hình chân I/O là ngõ vào, có trở kéo lên nguồn. Chân được kéo lên cao nếu chân không nối với  với mức điện áp thấp GND thì điện áp đọc được chân sẽ là mức điện áp cao(3,3V) hay giá trị 1 
++Input-pull-down: cấu hình chân I/O là ngõ vào, có trở kéo xuống GND. chế độ chân kéo xuống mức điện áp thâp khóa VDD mở , VSS đóng chân ở mode này luôn ở  mức điện áp thấp nếu không nối chân với nguồn điện áp cao
+.Analog : cấu hình chân I/O là Analog, dùng cho các mode có sử dụng ADC hoặc DAC. Sử dụng để đọc tín hiệu tương tự như cảm biết nhiệt độ, biến trở
++Output open-drain: cấu hình chân I/O là ngõ ra, khi output control = 0 thì N-MOS sẽ dẫn, chân I/O sẽ nối VSS, còn khi output control = 1 thì P-MOS và N-MOS đều không dẫn, chân I/O được để nổi. mode chân điều khiển mở và nhận điện áp từ nguồn điện áp  bên ngoài
++Output push-pull: cấu hình chân I/O là ngõ ra, khi output control = 0 thì N-MOS sẽ dẫn, chân I/O sẽ nối VSS, còn khi output control = 1 thì P-MOS dẫn, chân I/O được nối VDD. mode chân vi điều khiển xuất dẫn xung dao động vi điều khiển luân phiên va bên ngoài chân, mode này được sử dụng như nguồn clock giữ nhịp hoặc chân truyền sữ liệu tốc độ cao (SPI, UART ...)
+
++Các thanh ghi:  GPIOx->CRL, GPIOx->CRH (GPIOx=GPIOA,GPIOB,...) dùng để cấu hình mode
+
+-Thanh ghi xuất dữ liệu: điện áp ra ngoài chân tương ứng
+a.GPIOx->ODR (x=A,B,C,D,..G) : thanh ghi 32 bit từ 31 đến bit 16 dự trữ không sử dụng bit 0 đến bit 15 sử dụng cấu hình chân từ 0 đến 15
+Bit  tương ưng set lên 1 chân sẽ xuất dữ liệu hay mức điện áp cáo từ chân vi điều khiển ra bên ngoài, mức 0 chân sẽ ở mức điện áp thâp (0v)
+b.thanh ghi : GPIOx->BSRR : thanh ghi 32 bit các bit 0 đến đến 15 sẽ để set các bit 0 đến 15 của thanh ghi GPIOx->ODR lên 1 các bit 16 đến 31 sử dụng  để reset các bit 0 đến 15
+c.thanh ghi GPIOx->ODR về 0 khi ghi giá trị 1 vào bit tương ưng thanh ghi GPIOx->BSRR nếu ghi giá trị 0 vào bit thanh ghi GPIOx->BSRR thì sẽ không có hiệu lực
+
+- Đọc trạng thái điện áp của 1 chân input ,thanh ghi GPIOx->IDR(x=A,B,C,...): Thanh ghi 32 bit từ bit 31 đến bit 16 dự trư không sử dụng, từ bit 0 đến 15 sử dụng để đọc điện áp  chân cấu hình input từ 0 đên 15 nếu đọc bit có giá trị 1 thi điện áp đầu vào chân có mức điện áp cao nếu là 0 thi điện áp đầu vào chân là mưc thấp :

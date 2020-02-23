@@ -1,3 +1,25 @@
+-----------------------------Clock------------------------------------
+1. Khái niệm: Clock cung cấp xung nhịp cho lõi vi điều khiển và các thiết bị ngoại vi giúp chúng hoạt động được. Clock hệ thống quyết định tốc độ xử lí của vi điều khiển
+- Nguồn clock:
++ Dao động nội tốc độ cao(HSI): lấy từ dao động RC nội 8MHz
++ Dao động ngoại tốc độ cao(HSE): lấy tư thạch anh 4-16M
++ Nguồn clock PLL(Phase Lock Loop)
+Ngoài ra còn 2 nguồn clock phụ
++ Nguồn dao động RC nội (LSI RC) lấy từ RC nội 40KHz cung cấp cho IWDG
++ Dao động thạch anh ngoại(LSE crystal) lấy từ dao động thạch anh 32.768KHz cung cấp cho RTC-Realtime clock
+
+2. Quá trình thiết lập clock hệ thống
+Để cấu hình STM32 sử dụng ở tần số Clock cao nhất (72MHz) ta thực hiện theo các
+bước sau:
+	Cho phép bộ dao động HSE hoạt động.
+	Chờ cho bộ dao động HSE đi vào hoạt động ổn định (dùng làm đầu vào cho bộ PLL).
+	Với tần số thạch anh 8MHz, cấu hình bội số nhân cho bộ PLL là 9 để tạo ra tần số
+	Clock ở đầu ra bộ PLL = 72MHz.
+	Cho phép bộ PLL hoạt động.
+	Chờ cho bộ PLL đi vào hoạt động ổn đinh.
+	Khi đã hoạt động ổn định, cấu hình xung Clock từ bộ PLL sử dụng để cung cấp cho hệ
+	thống àhệ thống hoạt động với tần số Clock max = 72MHz.
+
 -----------------------------GPIO------------------------------------
 1. GPIO có 7 port A-G và mỗi port có 16 pin
 2. Config GPIO:
@@ -90,3 +112,56 @@ c. Thanh ghi
 	F/S : Sử dụng mode Fast(400khz) hay Standard(100Khz).
 	DUTY: Chỉ sử dụng cho Fast mode với 2 chế độ .
 	CCR[11:0] : Thanh ghi chứa Clock control cho bộ , công thức chia tham khảo thêm trong reference manual.
+
+	------------------------------------------EXTI--------------------------------------------------------------
+
+	1.Khái niệm
+- Ngắt (Interrupt) có thể hiểu nôm na là 1 tín hiệu khẩn cấp gửi đến bộ vi xử lý, yêu cầu bộ vi xử lý tạm dừng các công việc đang thực hiện để nhảy đến 1 nơi khác thực hiện một chương trình khác (công việc khác).
+- Một số thông số tính năng chính của NVIC:
+	16 mức ưu tiên có thể lập trình được.
+	Độ trễ thấp (xảy ra ngắt cực kì nhanh).
+	Có quản lí năng lượng cho vector ngắt.
+	Có các thanh ghi điều khiển quá trình ngắt.
+	68 vector ngắt
+	Ngắt ngoài nằm trong
+- Một số tính năng chính của ngắt ngoài:
+	Kích hoạt độc lập và mask cho mỗi line sự kiện/ngắt.
+	Có bit trạng thái (status) riêng cho mỗi line ngắt.
+	Có thể có tối đa 20 sự kiện/ ngắt, tham khảo thêm trong reference manual.
+	Kiểm tra tín hiệu ngoài có độ rộng xung nhỏ hơn clock trên APB2.
+- Có 2 loại ngắt ngoài chính đó là ngắt ngoài trên các chân điều khiển ở dạng thông thường và ngắt ngoài trên các ứng dụng như : PVD, RTC, USB, Ethernet(line 16-19)
+- Các line là riêng biệt, mỗi line x dùngchugn cho các chân PAx, PBx,... Khi enable ở chân này thì ở chân khác line đó không dùng được nữa.Với coretex-M3 ngắt được điều khiển bởi NVIC(Nest Vector Interrupt Controller), bảng vector ngắt sẽ định địa chỉ sẵn, khi xảy ra ngắt con trỏ sẽ nhảy đến vị trí đó thực hiện chương trình.
+Sau đó các line ngắt sẽ được phân bố vào bảng ector ngắt tương ứng: Các Line0, Line1, Line2, Line3, Line4 sẽ được phân vào các vector ngắt riêng biệt EXTI0, EXTI1, EXTI2, EXTI3, EXTI4, còn từ Line5->Line9 sẽ được phân vào vector ngắt EXTI9_5, Line10->Line15 được phân vào vecotr EXTI15_10.
+
+	2. Config EXTI
+A.
+b. Thanh ghi
+- EXTI_IMR – Interrupt mask register: Thanh ghi này cho phép có kiểm tra ngắt ngoài trên chân tương ứng hay chưa.
+- EXTI_EMR - Event mask register: Thanh ghi này cho phép có cấu hình sự kiện trên chân tương ứng hay chưa.
+- EXTI_RTSR – Rising trigger selection register: Thanh ghi này cho phép chân xảy ra sự kiện/ ngắt là cạnh lên hay không.
+- EXTI_PR – Pending register : Đây là thanh ghi chờ xử lý ngắt, khi có yêu cầu ngắt được tạo ra trên một Line ngắt thì bit tương tứng của thanh ghi này được bật lên cho đến khi ngắt này được xử lý. Nhiều trước hợp có sự thay đổi sườn tín hiệu tạo ra yêu cầu ngắt nhưng ngắt không được thực thi như: độ ưu tiên thấp, chưa cho phép ngắt toàn cục.
+- EXTI_SWIER – Software interrupt even register:  Thanh ghi này cho phép mô phỏng ngắt ngoài xảy ra trên chân đã được cấu hình(thay vị tác động bằng cạnh lên/xuống trên chân vi điều khiển ta có thể sử dụng nó để giả lập tác động từ bên ngoài bằng việc set hoặc reset bit tương ứng).
+
+----------------------------------------Systick Tim-----------------------------------------
+1. Khái niệm
+System Tick Timer là bộ timer 24 bit độc lập nằm trong lõi cortex. Bộ timer này là timer đếm xuống, xảy ra ngắt ở mức ưu tiên cao khi giá trị đếm bằng 0 và tự nạp lại giá trị đếm ban đầu.
+
+System Tick Timer thường được được dùng để tạo hàm delay với độ chính xác cao, thay thế cho các hàm delay với độ chính xác tương đối dùng vòng lặp for hay while.
+- Đặc điểm:
+	Là một bộ đếm xuống 24 Bit.
+	Giá trị đếm được tự động nạp lại khi bộ đếm đếm về 0.
+	Có thể tạo ra 1 sự kiện ngắt khi bộ đếm đếm về 0.
+	Nguồn Clock có thể chọn từ:
+		Nguồn Clock của hệ thống (AHB).
+		Nguồn Clock của hệ thống /8 (AHB/8).
+	Systick sẽ đếm từ giá trị nạp lại (được khởi tạo sẵn) về 0 và giá trị này tự động được nạp lại trong chu kỳ đếm tiếp theo.
+2. Một số thanh ghi
+a. STK_CTRL - SysTick control and status register.
+COUNTFLAG : bằng 1 ở lần đầu tiên giá trị đếm = 0 và giữ nguyên trạng thái cho các lần tiếp theo.
+CLKSOURCE: chọn lựa nguồn clock source là AHB/8 hoặc AHB.
+TICKINT : có kiểm tra ngắt khi bộ đếm bằng 0 hay không.
+ENABLE: cho phép bộ đếm bắt đầu đếm hay không.
+b.STK_LOAD – SysTick reload value register.
+RELOAD: đây là giá trị đếm được truyền vào khi bộ đếm bắt đầu và khi bộ đếm bắt đầu lại khi tràn về 0. Giá trị thực của bộ đếm = giá trị truyền vào + 1. Giá trị tối đa của thanh ghi này = 2^24.
+c.K_VAL - SysTick current value register.
+CURRENT[23:0] : thanh ghi này chứa giá trị đếm hiện tại của bộ đếm.

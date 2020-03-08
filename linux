@@ -1,0 +1,36 @@
+---------------------------------------FILE----------------------------------
+- Kernel buffer: Khi read/write file, thay vi ghi truc tiep vao file trong o cung(ton time), se copy vao mot buffer trong kernel. Sau do co kernel thread thu thap va ghi buffer do vao o cung, roi lam sach buffer de tai su dung.
++ file bao gồm 2 phần: dâta và metadata(owner,quyền truy cập file, kích thước, số hardlink đến file,...)
+# Có 2 cách đồng bộ thủ công dữ liệu giữa kernel buffer và ổ cứng:
+1Synchronized I/O data integrity chỉ yêu cầu nội dung data của file được đồng bộ giữa tiến trình và file
+2Synchronized I/O file integrity yêu cầu tất cả nội dung của file bao gồm data và metadata phải được đồng bộ giữa tiến trình gọi và ổ cứng
+
+--------------------------------------PROCESS----------------------------------
+- Chương trình (program) là một file chạy được (executable) chứa các chỉ lệnh (instruction) được viết để thực thi một công việc nào đó trên máy tính
++tiến trình (process) là một phiên bản đang chạy của một chương trình. Tiến trình được gọi là thực thể chủ động (active entity) để phân biệt với chương trình, vì nó sẽ được copy từ ổ cứng sang bộ nhớ RAM để chạy trên hệ điều hành máy tính 
+# Cấu trúc bộ nhớ của tiến trình:
+					Heap
+				
+					Stack
+
+					Uninitialized data segment(bss)
+
+					Initialized data
+
+					Text code
+
+-Text code: Chứa các chỉ lệnh ngôn ngữ máy (machine-language instruction) của chương trình mà tiến trình đó chạy. Text segment chính là các chỉ lệnh được biên dịch từ source code của lập trình viên cho chương trình đó. Nội dung của phân vùng này không thay đổi trong suốt quá trình process tồn tại nên được kernel thiết lập chế độ read-only để bảo vệ khỏi sự truy cập vô tình hay cố ý của người dùng. Như đã nói ở trên, vì nhiều tiến trình có thể chạy một chương trình nên text segment cũng được thiết lập sharable để các tiến trình có thể sử dụng chung để tiết kiệm tài nguyên.
++Initialized data segment(bss): Vùng này chứa các biến toàn cục (global) và biến static mà đã được khởi tạo từ code của chương trình. Giá trị của các biến này được đọc từ các file thực thi khi chương trình được tải vào RAM
+#Uninitialized data segment: Còn được gọi là vùng bss segment. Segment này chứa các biến toàn cục và static mà 'chưa' được khởi tạo từ source code. Ví dụ khi lập trình viên khai báo biến tĩnh “static var;”, biến var sẽ được chứa ở vùng này và được khởi tạo giá trị 0, khi một chương trình được lưu trữ vào ổ cứng, không cần thiết phải cấp phát tài nguyên cho uninitialized data segment; thay vào đó chương trình chỉ cần nhớ vị trí và kích thước biến được yêu cầu cho vùng này, các biến này sẽ được cấp phát run time khi chương trình được tải vào RAM.
+-Stack segment: Chứa stack frame của tiến trình. Chúng ta sẽ tìm hiểu sâu hơn về stack và stack frame ở phần dưới đây. Tạm thời hiểu là khi 1 hàm được gọi, một stack frame sẽ được cấp phát cho hàm đó (các biến được khai báo trong hàm, các đối số truyền vào hay giá trị return) và sẽ bị thu hồi khi hàm đó kết thúc. Vì vậy, stack segment có thể giãn ra hoặc co lại khi tiến trình cấp phát/thu hồi các stack frame.
+ Khi một hàm được gọi, một stack frame của hàm đó được cấp phát và push vào stack; và stack frame này sẽ được thu hồi khi hàm đó return.thu hồi khi hàm đó return.
+Mỗi stack frame chứa các thông tin sau:
+1.Đối số (argument) của hàm và các biến cục bộ (local variable): Các biến này còn được gọi là biến tự động (automatic variable) vì chúng sẽ tự động được tạo ra khi hàm được gọi và tự động biến mất khi hàm đó return (vì stack frame cũng biến mất).
+2.Call linkage information: Các hàm khi chạy sẽ sử dụng các thanh ghi của CPU, ví dụ như thanh ghi program counter (pc) lưu chỉ lệnh tiếp theo được thực thi. Mỗi lần một hàm (ví dụ hàm X) gọi hàm khác (ví dụ hàm Y), giá trị các thanh ghi mà hàm X đang dùng sẽ được lưu vào stack frame của hàm Y; và sau khi hàm Y return, các giá trị thanh ghi này sẽ được phục hồi cho hàm X tiếp tục chạy.
++Heap segment: Là vùng bộ nhớ lưu các biến được cấp phát động (dynamic allocate) tại thời điểm run time. Tương tự như stack segment, heap segment cũng có thể giãn ra hoặc co vào khi một biến được cấp phát hoặc free.
+
+	`fork(): Tạo ra 1 bản sao cho bộ nhớ hiện tại của process
+	`exec(): Tạo process mới tại điểm bắt đầu tiến trình
+	`wait(): Block process cho đến khi 1 trong các process con kết thúc
+	`system(): Cho thực hiện một command line trong C
+	`

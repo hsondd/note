@@ -33,4 +33,29 @@ Mỗi stack frame chứa các thông tin sau:
 	`exec(): Tạo process mới tại điểm bắt đầu tiến trình
 	`wait(): Block process cho đến khi 1 trong các process con kết thúc
 	`system(): Cho thực hiện một command line trong C
-	`
+
+
+
+
+
+--------------------------------------------------------------------THREAD--------------------------------------------------------------------------------
+- Thread là một cơ chế cho phép một ứng dụng thực thi đồng thời nhiều công việc (multi-task)
++ Thread là một thành phần của tiến trình, một tiến trình có thể chứa một hoặc nhiều thread
+#Các thread trong tiến trình chia sẻ các vùng nhớ toàn cục (global memory) của tiến trình bao gồm initialized data, uninitialized data và vùng nhớ heap
+Một thread đang thực thi có thể được kết thúc bằng một trong các cách sau:
+1.Hàm bắt đầu của thread thực thi câu lệnh return
+2.Một hàm bất kỳ trong thread gọi hàm pthread_exit(), chúng ta sẽ nói về hàm này ở dưới đây
+3.Thread bị hủy bỏ bằng hàm pthread_cancel()
+4.Một thread bất kỳ của tiến trình gọi hàm exit() hoặc thread chính của tiến trình (hàm main()) gọi return. Cả 2 cách này đều có tác dụng kết thúc tiến trình đang chạy và tất nhiên cả các thread của tiến trình đó.
+-một thread được tạo ra cũng giống như một tiến trình con, cần phải được theo dõi trạng thái và thu hồi tài nguyên khi kết thúc, tránh việc tạo ra zombie thread gây lãng phí tài nguyên của tiến trình
++Trong Linux, một pthread khi được tạo ra sẽ mặc định là joinable thread. Do đó, thread sau khi kết thúc sẽ được “join” để lấy được trạng thái kết thúc và thu hồi tài nguyên của nó.
+#Một thread được thiết lập là detached thread khi lập trình viên không cần quan tâm đến trạng thái kết thúc của nó. Khác với joinable thread, kernel sẽ tự động thu hồi tài nguyên của detached thread khi nó kết thúc.
+-#Thuật ngữ critical section (vùng trọng yếu) dùng để chỉ đoạn code mà truy cập vào tài nguyên toàn cục (global resource); đoạn code này nên được chạy hết từ đầu đến cuối bởi mỗi thread thay vì bị ngắt khi có một thread khác xen vào đọc hoặc thay đổi các biến toàn cục trong đó.Như vậy, critical section nên được bảo vệ để khi các thread đồng thời chạy vào, nó phải chờ cho đến khi thread đang chạy thực thi xong và ra khỏi thì mới được chạy vào. Việc này gọi là đồng bộ thread (thread synchronization)
+1.Kỹ thuật mutual exclusion (gọi tắt là mutex) dùng để bảo vệ tài nguyên chia sẻ (shared variable) mà chủ yếu là biến chia sẻ (shared variable) giữa các thread. Mỗi vùng critical section sẽ được bảo vệ trong phòng và có một cái khóa ở cửa, một thread trước khi chạy vào critical section sẽ khóa lại rồi vào làm những gì mình muốn làm; sau khi xong việc nó sẽ mở khóa để cho các thread khác truy cập. Các thread khác nếu thấy cửa đang khóa thì phải chờ (đi vào trạng thái blocked) cho đến khi thread trước mở khóa; sau đó nó tiếp tục khóa lại rồi chạy vào critical section và mở khóa ra sau khi xong việc.
+- Trạng thái một thread khóa một mutex mà rơi vào trạng thái chờ không thể giải thoát được gọi là deadlock. Có 2 trường hợp:Thread A khóa một mutex mà chính nó trước đó đã bị khóa bởi chính nó hoặc Thread A khóa Mutex1 và vào critical section, sau đó cố gắng khóa một Mutex2 mà thread B đang giữ. Trong khi đó, thread B đang khóa Mutex2 và lại cố gắng khóa Mutex1 ở trong critical section.
+
+	`pthread_create():tao ra thread moi
+	`pthread_exit():
+	`pthread_join() sẽ block chương trình và chờ cho thread với ID truyen vao kết thúc
+	`pthread_detach(), chuyển thread thành detached thread
+	`pthread_mutex_lock, pthread_mutex_unlock

@@ -1,0 +1,34 @@
+- Object: Đối tượng là một thực thể trong đời thực. Một đối tượng có thuộc tính và phương thức. VD: Con chó có thuộc tính màu, lông, tuổi, giống,..Phương thức: sủa, ăn, tiêu hóa, chạy. Đối tượng là thể hiện của 1 lớp, tát cả các thành viên cua lớp được truy cập thông qua đối tượng
++ Class: Là 1 nhóm của đối tượng. Một class sẽ định nghĩa danh sách những tính chất và phương thức đối tuowjjng trong class sở hữu.
+# Trừu tượng(Abstraction): Tập trung vào cốt lõi của đối tượng, không quan tâm những thứ ko liên quan. Ví dụ: Khi nói cái quạt chỉ biết là vật làm mát ko biết là quạt cây, quạt treo tường,... VD2: class BankAccount có số thẻ, số dư bỏ qua ngày mở thẻ, còn class tomAccount có số thẻ, số dư, ngày thành lập. VD3: Con người trừu tượng hóa thành class Student: mssv, tuổi, giới tính, lớp; con người trừu tượng thành class Employee: sô hiệu nhan viên, số lương, đơn vị.
+- Tính đóng gói (encapsulation): Trong lập trình cũng như thế, có những yếu tố của một đối tượng mà ta muốn che giấu khỏi người khác hoặc chương trình khác, để không bị xáo trộn lung tung gây hỏng hóc. Ví dụ class HócSinh cos thuộc tính: Điể mtoans, lý hóa, ddierm trung bình, nếu vô tình làm thay đổi 1 điểm sẽ dẫn đến các điểm trung bình thay đổi, vì vậy cần che giấu dữ liệu
++ Tính thừa kế (inheritance): class con có các thành phần của class cha, thừa hương các thuộc tính từ cha, giúp tái sử dụng class. VD: Class Person: Name, Email, Phone ; Class Student: StudentID Lúc này Student có thêm thuộc tính StudentID và vẫn có đủ thuộc tính của Person. Có nhiều loại kế thừa.
+# Tính đa hình (polymorphism): Ở lớp cha có phương thức là Draw, tùy theo phuong thức lớp con có thể vẽ là hình vuông, hình tròn, hình chữ  nhật.
+- Khai bao class:
+	class HocSinh{
+	    //Khai bao (cai dat) thuoc tinh
+	    //Khai bao (cai dat) phuong thuc
+	    //Khai bao thuoc tinh, giong khai bao bien
+	    //Khai bao phuong thuc giong khai bao ham
+	    //private:  chi su dung trong class do thoi
+	    //public: the gioi ben ngoai co the su dung
+	    //protected:
+	private:
+	    string HoTen;
+	    void xuat();
+	public:
+	    string DiaChi;
+	    void nhap();
+	    float tinhDiem();
+
+	};
+
+	int main()
+	{
+	    HocSinh HS;//cach khoi tao doi tuong tu class
+	    HS.DiaChi = "Ha Noi";
+	    HS.nhap();//Cach truy cap den thanh phan cua class
+
+	    return 0;
+	}
++ Co 2 cach dinh nghia phuong thuc class, Khai bao va dinh nghia trong class, hai bao trong class va dinh nghia ben ngoai. Cu phap: KieuTraVe TenClass::TenPhuongThuc

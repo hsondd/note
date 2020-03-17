@@ -28,6 +28,11 @@ Mỗi stack frame chứa các thông tin sau:
 1.Đối số (argument) của hàm và các biến cục bộ (local variable): Các biến này còn được gọi là biến tự động (automatic variable) vì chúng sẽ tự động được tạo ra khi hàm được gọi và tự động biến mất khi hàm đó return (vì stack frame cũng biến mất).
 2.Call linkage information: Các hàm khi chạy sẽ sử dụng các thanh ghi của CPU, ví dụ như thanh ghi program counter (pc) lưu chỉ lệnh tiếp theo được thực thi. Mỗi lần một hàm (ví dụ hàm X) gọi hàm khác (ví dụ hàm Y), giá trị các thanh ghi mà hàm X đang dùng sẽ được lưu vào stack frame của hàm Y; và sau khi hàm Y return, các giá trị thanh ghi này sẽ được phục hồi cho hàm X tiếp tục chạy.
 +Heap segment: Là vùng bộ nhớ lưu các biến được cấp phát động (dynamic allocate) tại thời điểm run time. Tương tự như stack segment, heap segment cũng có thể giãn ra hoặc co vào khi một biến được cấp phát hoặc free.
+#Typically two processes communicate with each other on a single system through one of the following inter process communication techniques.
+
+Pipes
+Message queues
+Shared memory
 
 	`fork(): Tạo ra 1 bản sao cho bộ nhớ hiện tại của process
 	`exec(): Tạo process mới tại điểm bắt đầu tiến trình
@@ -59,3 +64,41 @@ Một thread đang thực thi có thể được kết thúc bằng một trong 
 	`pthread_join() sẽ block chương trình và chờ cho thread với ID truyen vao kết thúc
 	`pthread_detach(), chuyển thread thành detached thread
 	`pthread_mutex_lock, pthread_mutex_unlock
+
+
+
+-------------------------------------------------------SOCKET----------------------------------------------------
+-Socket là một điểm cuối (end-point) của liên kết giao tiếp hai chiều (two-way communication) giữa hai chương trình chạy trên mạng. Nghĩa là một socket được sử dụng để cho phép 1 process nói chuyện với 1 process khác.
+1.Stream sockets: Dựa trên giao thức TCP (Tranmission Control Protocol), là giao thức hướng luồng (stream oriented). Việc truyền dữ liệu chỉ thực hiện giữa 2 tiến trình đã thiết lập kết nối. Giao thức này đảm bảo dữ liệu được truyền đến nơi nhận một cách đáng tin cậy, đúng thứ tự nhờ vào cơ chế quản lý luồng lưu thông trên mạng và cơ chế chống tắc nghẽn. Dùng cho mạng WAN, tốc độ thấp
+2.Datagram sockets: Dựa trên giao thức UDP (User Datagram Protocol), là giao thức hướng thông điệp (message oriented). Việc truyền dữ liệu không yêu cầu có sự thiết lập kết nối giữa tiến quá trình. Ngược lại với giao thức TCP thì dữ liệu được truyền theo giao thức UDP không được tin cậy, có thế không đúng trình tự và lặp lại. Tuy nhiên vì nó không yêu cầu thiết lập kết nối không phải có những cơ chế phức tạp nên tốc độ nhanh…ứng dụng cho các ứng dụng truyền dữ liệu nhanh như chat, game….. Dùng cho majng LAN, Tốc độ truyền cao, VolP truyền tốt qua UDP
+
++TCP Server –
++using create(), Create TCP socket.
++using bind(), Bind the socket to server address.
++using listen(), put the server socket in a passive mode, where it waits for the client to approach the server to make a connection
++using accept(), At this point, connection is established between client and server, and they are ready to transfer data.
++Go back to Step 3.
++TCP Client –
++Create TCP socket.
++connect newly created client socket to server.
+
+UDP Server:
+Create UDP socket.
+Bind the socket to server address.
+Wait until datagram packet arrives from client.
+Process the datagram packet and send a reply to client.
+Go back to Step 3.
+UDP Client:
+Create UDP socket.
+Send message to server.
+Wait until response from server is recieved.
+Process reply and go back to step 2, if necessary.
+Close socket descriptor and exit.
+
+
+
+
+	`socket()
+	`bind
+	`listen()
+	`accept()

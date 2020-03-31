@@ -32,3 +32,10 @@
 	    return 0;
 	}
 + Co 2 cach dinh nghia phuong thuc class, Khai bao va dinh nghia trong class, hai bao trong class va dinh nghia ben ngoai. Cu phap: KieuTraVe TenClass::TenPhuongThuc
+# Con trỏ this tham chiếu đến đối tượng đang gọi hàm thành phần. . Con trỏ this trong C++ là một từ khóa đề cập đến thể hiện hiện tại của lớp, là một tham số ẩn với tất cả hàm thành viên. Vì thế, bên trong một hàm thành viên, con trỏ this có thể tham chiếu tới đối tượng đang gọi. Cach 1: Trỏ đến thành phần class hiện tại, Cách 2: Trả về object hiện tại
+- Đối tượng có thể là tham số truyền vào của phương thức
++ Hàm khởi tạo- Constructor là hàm mặc định được dùng để khởi tạo đối tượng, cùng tên với class, khong co kieu tra ve, va phải trong tầm vực public. Có 3 loại
+1Constructor mặc định
+2.Constructor có tham số
+3.Constructor sao chép
+#Thuộc tính tĩnh- static data member: 1 bản duy nhất tồn tại trong suốt quá trình chạy của chương trình, dùng chung cho tất cả đối tượng của class, phải định nghĩa bên ngoài clss

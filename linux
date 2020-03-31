@@ -4,6 +4,10 @@
 # Có 2 cách đồng bộ thủ công dữ liệu giữa kernel buffer và ổ cứng:
 1Synchronized I/O data integrity chỉ yêu cầu nội dung data của file được đồng bộ giữa tiến trình và file
 2Synchronized I/O file integrity yêu cầu tất cả nội dung của file bao gồm data và metadata phải được đồng bộ giữa tiến trình gọi và ổ cứng
+	`sync(), fsync(), fdatasync(): đồng bộ file ở kernel buffer xuông ổ cứng
+	`select(): theo dõi nhiều mô tả file, trả về fd của file sẵn sàng
+	`poll() tuong tu select, khac cach truyen mo ta file. poll co hieu nang cao hon. Giả sử nếu bạn chỉ muốn theo dõi mô tả file fd là 1000 			thì kernel vẫn phải quét 1001 mô tả file (từ 0 đến 1000) để xem mô tả file nào được theo dõi (1001 poll routine). Với poll() 			thì khác, bạn chỉ cần truyền cấu trúc với chính xác mô tả file fd 1000 kèm với sự kiện quan tâm tương ứng xuống kernel, do vậy 			kernel sẽ gọi 1 poll routine để kiểm tra duy nhất mô tả file 1000.
+
 
 --------------------------------------PROCESS----------------------------------
 - Chương trình (program) là một file chạy được (executable) chứa các chỉ lệnh (instruction) được viết để thực thi một công việc nào đó trên máy tính
@@ -22,8 +26,8 @@
 -Text code: Chứa các chỉ lệnh ngôn ngữ máy (machine-language instruction) của chương trình mà tiến trình đó chạy. Text segment chính là các chỉ lệnh được biên dịch từ source code của lập trình viên cho chương trình đó. Nội dung của phân vùng này không thay đổi trong suốt quá trình process tồn tại nên được kernel thiết lập chế độ read-only để bảo vệ khỏi sự truy cập vô tình hay cố ý của người dùng. Như đã nói ở trên, vì nhiều tiến trình có thể chạy một chương trình nên text segment cũng được thiết lập sharable để các tiến trình có thể sử dụng chung để tiết kiệm tài nguyên.
 +Initialized data segment(bss): Vùng này chứa các biến toàn cục (global) và biến static mà đã được khởi tạo từ code của chương trình. Giá trị của các biến này được đọc từ các file thực thi khi chương trình được tải vào RAM
 #Uninitialized data segment: Còn được gọi là vùng bss segment. Segment này chứa các biến toàn cục và static mà 'chưa' được khởi tạo từ source code. Ví dụ khi lập trình viên khai báo biến tĩnh “static var;”, biến var sẽ được chứa ở vùng này và được khởi tạo giá trị 0, khi một chương trình được lưu trữ vào ổ cứng, không cần thiết phải cấp phát tài nguyên cho uninitialized data segment; thay vào đó chương trình chỉ cần nhớ vị trí và kích thước biến được yêu cầu cho vùng này, các biến này sẽ được cấp phát run time khi chương trình được tải vào RAM.
--Stack segment: Chứa stack frame của tiến trình. Chúng ta sẽ tìm hiểu sâu hơn về stack và stack frame ở phần dưới đây. Tạm thời hiểu là khi 1 hàm được gọi, một stack frame sẽ được cấp phát cho hàm đó (các biến được khai báo trong hàm, các đối số truyền vào hay giá trị return) và sẽ bị thu hồi khi hàm đó kết thúc. Vì vậy, stack segment có thể giãn ra hoặc co lại khi tiến trình cấp phát/thu hồi các stack frame.
- Khi một hàm được gọi, một stack frame của hàm đó được cấp phát và push vào stack; và stack frame này sẽ được thu hồi khi hàm đó return.thu hồi khi hàm đó return.
+-Stack segment: Chứa stack frame của tiến trình.y. Tạm thời hiểu là khi 1 hàm được gọi, một stack frame sẽ được cấp phát cho hàm đó (các biến được khai báo trong hàm, các đối số truyền vào hay giá trị return) và sẽ bị thu hồi khi hàm đó kết thúc. Vì vậy, stack segment có thể giãn ra hoặc co lại khi tiến trình cấp phát/thu hồi các stack frame.
+ Khi một hàm được gọi, một stack frame của hàm đó được cấp phát và push vào stack; và stack frame này sẽ được thu hồi khi hàm đó return.
 Mỗi stack frame chứa các thông tin sau:
 1.Đối số (argument) của hàm và các biến cục bộ (local variable): Các biến này còn được gọi là biến tự động (automatic variable) vì chúng sẽ tự động được tạo ra khi hàm được gọi và tự động biến mất khi hàm đó return (vì stack frame cũng biến mất).
 2.Call linkage information: Các hàm khi chạy sẽ sử dụng các thanh ghi của CPU, ví dụ như thanh ghi program counter (pc) lưu chỉ lệnh tiếp theo được thực thi. Mỗi lần một hàm (ví dụ hàm X) gọi hàm khác (ví dụ hàm Y), giá trị các thanh ghi mà hàm X đang dùng sẽ được lưu vào stack frame của hàm Y; và sau khi hàm Y return, các giá trị thanh ghi này sẽ được phục hồi cho hàm X tiếp tục chạy.
@@ -68,6 +72,22 @@ Một thread đang thực thi có thể được kết thúc bằng một trong 
 
 
 -------------------------------------------------------SOCKET----------------------------------------------------
+
+			Application layer
+
+			Transport layer
+
+			Internet layer
+
+			Network Interface layer
+
++ Có 4 lớp trong mô hình TCP
+1.Lơp truy nhập mạng: bao gồm các thiết bị giao tiếp mạng và các chương trình cung cấp các thông tin cần thiết để có thể hoạt động, truy nhập đường truyền vật lý qua các thiết bị giao tiếp mạng đó. Các chức năng trình diễn trong tầng này bao gồm đóng gói gói thông tin IP thành các "Frame" được truyền dẫn trên mạng và chuyển địa chỉ IP thành địa chỉ vật lý sử dụng bởi mạng máy tính.
+2.Lơps Internet: Mục đích của lớp Internet là chọn lấy một đường dẫn tốt nhất xuyên qua mạng cho các gói di chuyển tới đích. Các giao thức của tầng này bao gồm : IP ( Internet Protocol) , ICMP ( Internet Control Message Protocol) , IGMP ( Internet Group Message Protocol ). Giao thức chính hoạt động tại lớp này là Internet Protocol (IP). Sự xác định đường dẫn tốt nhất và chuyển mạch gói diễn ra tại lớp này. IP thực hiện các hoạt động sau: Định nghĩa một gói là một lược đồ đánh địa chỉ.->Trung chuyển số liệu giữa lớp Internet và lớp truy nhập mạng.->Định tuyến chuyển các gói đến host ở xa.
+3.  Tầng giao vận phụ trách luồng dữ liệu giữa 2 trạm thực hiện các ứng dụng của tầng trên, tầng này có 2 giao thức chính là TCP ( Transmisson Control Protocol) và UDP ( User Datagram Protocol ). Cả hai giao thức đều chuyển giao thông tin giữa tầng ứng dụng và tầng Internet
+4. Tầng ứng dụng là tầng trên của mô hình TCP/IP bao gồm các tiến trình và các ứng dụng cung cấp cho người sử dụng để truy cập mạng. Có rất nhiều ứng dụng được cung cấp trong tầng này , mà phổ biến là Telnet: sử dụng trong việc truy cập mạng từ xa, FTP ( File Transport Protocol ) dịch vụ truyền tệp tin
+
+
 -Socket là một điểm cuối (end-point) của liên kết giao tiếp hai chiều (two-way communication) giữa hai chương trình chạy trên mạng. Nghĩa là một socket được sử dụng để cho phép 1 process nói chuyện với 1 process khác.
 1.Stream sockets: Dựa trên giao thức TCP (Tranmission Control Protocol), là giao thức hướng luồng (stream oriented). Việc truyền dữ liệu chỉ thực hiện giữa 2 tiến trình đã thiết lập kết nối. Giao thức này đảm bảo dữ liệu được truyền đến nơi nhận một cách đáng tin cậy, đúng thứ tự nhờ vào cơ chế quản lý luồng lưu thông trên mạng và cơ chế chống tắc nghẽn. Dùng cho mạng WAN, tốc độ thấp
 2.Datagram sockets: Dựa trên giao thức UDP (User Datagram Protocol), là giao thức hướng thông điệp (message oriented). Việc truyền dữ liệu không yêu cầu có sự thiết lập kết nối giữa tiến quá trình. Ngược lại với giao thức TCP thì dữ liệu được truyền theo giao thức UDP không được tin cậy, có thế không đúng trình tự và lặp lại. Tuy nhiên vì nó không yêu cầu thiết lập kết nối không phải có những cơ chế phức tạp nên tốc độ nhanh…ứng dụng cho các ứng dụng truyền dữ liệu nhanh như chat, game….. Dùng cho majng LAN, Tốc độ truyền cao, VolP truyền tốt qua UDP
@@ -94,11 +114,22 @@ Send message to server.
 Wait until response from server is recieved.
 Process reply and go back to step 2, if necessary.
 Close socket descriptor and exit.
-
-
+-UDP header: gồm UDP header và UDP data. UDP header đơn giản bao gồm 8 byte(source port, destination port, length, checksum) trong khi TCP header 20-60byte
 
 
 	`socket()
 	`bind
 	`listen()
 	`accept()
+	`connect()
+
+
+------------------------------------------------------------SCTP----------------------------------------------------------------
+- Stream Control Transmission Protocol - Giao thức truyền vận điều khiển dòng
++ SCTP có nhiều điểm tương đồng với TCP. Cả hai đều là các giao thức vận chuyển tin cậy dựa trên IP, áphân phối gói theo trình tự và kiểm soát tắc nghẽn theo biến đổi tốc độ. TCP có checksum 16 bit (RFC 1071) thì SCTP có CRC 32 bit (RFC 4960)
++ Khác: Tuy nhiên, SCTP cung cấp một số chức năng không có trong TCP như: SCTP được định hướng theo message trong khi TCP được định hướng theo luồng, SCTP có thể xử lý nhiều luồng đồng thời và luồng đa kênh trong đó TCP chỉ có thể xử lý một luồng dữ liệu trên mỗi kết nối. SCTP cho phép dữ liệu được chuyển thành nhiều luồng độc lập, do đó, nếu mất dữ liệu trong một luồng, việc truyền dữ liệu sẽ không ảnh hưởng đối với các luồng khác. Tính năng kiểm soát kết nối, nhận biết luồng của SCTP là một trong những tính năng đáng chú ý nhất của nó. 
+#SCTP cũng có nhiều tính năng tương tự như UDP. Cả hai đều hỗ trợ vận chuyển không xác thực và truyền tin ngoài gói. SCTP có tiêu đề 12 byte so với tiêu đề 8 byte của UDP. SCTP có tính năng phát hiện kết nối, qua đó phát hiện các gói bị mất và trùng lặp.
+Đặc trưng SCTP:
+# Multi-homing: Máy chủ có nhiều giao diện mạng và do đó có nhiều địa chỉ IP có thể xử lý. SCTP theo dõi các đường dẫn, khi phát hiện đường dẫn này có lỗi sẽ gửi dữ liệu qua đường truyền khác thay thế (failover). Failover cũng có thể được sử dụng để duy trì kết nối ứng dụng mạng. Ví dụ, hãy xem xét một máy tính xách tay bao gồm giao diện 802.11 không dây và giao diện Ethernet. Khi máy tính xách tay ở trong trạm kết nối, giao diện Ethernet tốc độ cao hơn sẽ được ưu tiên (trong SCTP, được gọi là địa chỉ chính); nhưng khi mất kết nối này (loại bỏ khỏi trạm nối), các kết nối sẽ chuyển đổi với giao diện không dây. Khi trở về trạm nối, kết nối Ethernet sẽ được phát hiện và giao tiếp được tiếp tục qua giao diện này. Đây là một cơ chế mạnh mẽ để cung cấp tính sẵn sàng cao và tăng độ tin cậy.
+#Multi-streaming: SCTP cũng giống như TCP ngoại trừ khả năng SCTP hoõ trợ đa luồng trong 1 kết nối. Mỗi luồng được cung cấp một số luồng được mã hóa bên trong các gói SCTP chảy qua liên kết. Đa luồng rất quan trọng vì một luồng bị chặn (ví dụ: một luồng đang chờ truyền lại dẫn đến việc mất gói) không ảnh hưởng đến các luồng khác trong một liên kết. Vấn đề này thường được gọi là chặn đầu dòng. TCP dễ bị chặn như vậy
+

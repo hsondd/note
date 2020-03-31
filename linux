@@ -133,3 +133,16 @@ Close socket descriptor and exit.
 # Multi-homing: Máy chủ có nhiều giao diện mạng và do đó có nhiều địa chỉ IP có thể xử lý. SCTP theo dõi các đường dẫn, khi phát hiện đường dẫn này có lỗi sẽ gửi dữ liệu qua đường truyền khác thay thế (failover). Failover cũng có thể được sử dụng để duy trì kết nối ứng dụng mạng. Ví dụ, hãy xem xét một máy tính xách tay bao gồm giao diện 802.11 không dây và giao diện Ethernet. Khi máy tính xách tay ở trong trạm kết nối, giao diện Ethernet tốc độ cao hơn sẽ được ưu tiên (trong SCTP, được gọi là địa chỉ chính); nhưng khi mất kết nối này (loại bỏ khỏi trạm nối), các kết nối sẽ chuyển đổi với giao diện không dây. Khi trở về trạm nối, kết nối Ethernet sẽ được phát hiện và giao tiếp được tiếp tục qua giao diện này. Đây là một cơ chế mạnh mẽ để cung cấp tính sẵn sàng cao và tăng độ tin cậy.
 #Multi-streaming: SCTP cũng giống như TCP ngoại trừ khả năng SCTP hoõ trợ đa luồng trong 1 kết nối. Mỗi luồng được cung cấp một số luồng được mã hóa bên trong các gói SCTP chảy qua liên kết. Đa luồng rất quan trọng vì một luồng bị chặn (ví dụ: một luồng đang chờ truyền lại dẫn đến việc mất gói) không ảnh hưởng đến các luồng khác trong một liên kết. Vấn đề này thường được gọi là chặn đầu dòng. TCP dễ bị chặn như vậy
 
+
+
+
+-------------------------------------------------------------MEMORY----------------------------------------------------------------------
+- Linux sử dụng cơ chế quản lý bộ nhớ ảo (virtual memory managemment). Kỹ thuật này khai thác đặc điểm chung của các chương trình là tham chiếu vùng (locality ò referene):
++ Spactial locality: chương trình có xu hướng tham chiếu đến địa chỉ bộ nhớ gần với phân vùng bộ nhớ nó đang truy cập
++ Temporal locality: chương trình có xu hướng truy cập một vùng nhớ trong thời điểm rất gần nhau
+# Một bộ nhớ ảo chia không gian bộ nhớ tiến trình ra nhiều đoạn nhỏ có kích thước cố định là các trang (page). RAM cũng chia làm nhiều đoạn nhỏ cùng kích thước là page frame. Taị mỗi thời điểm, process chỉ cần tải 1 vài trang vào trong frame để chay, các trang chưa sử dujgn để ở phân vùng swap và tải khi cần
+- Kernel tạo ra bảng page table cho mỗi tiến trình. Mỗi entry của page table ứng với 1 trang cuar bộ nhớ ảo cho phép chỉ ra vị trí của trang đó nằm ở đâu trong RAM
++ Demand paging: Là kỹ thuật xây dựng các bảng paging table và tải các page tiến trình theo nhu cầu. Nếu process truy cập vào phần page chưa có trong RAM hoặc chưa được dựng bảng paging table thì CPU sinh ra page fault( tạm dừng thực thi cho đén khi kernel hoàn tất tải bộ nhớ nó đang cần vào RAM). Trong thời gian đó, để tối ưu xử lý, CPU thực hiện process khác đang chờ đã có bộ nhớ cần thiết trong RAM và quay lại thực thi tiến trình cũ từ chính page fault
+#Cấp phát bộ nhớ trên Heap: Dùng brk, sbrk, malloc, calloc,..Thay đổi kích thước phân vùng heap bằng cách tăng giảm giá trị program break. Sau khi program break tăng, process có thể truy cập vào vùng nhớ mới được cấp phát, nhưng đấy chỉ là trên không gian địa chỉ ảo. Địa chỉ vật lý sẽ tự độgn cấp phát khi process truy cập lần đầu vào chúng.
+- Cấp phát trên Stack: Dùng alloca. Do cấp phát ở stack nên tự thu hồi.
+

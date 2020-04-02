@@ -146,3 +146,14 @@ Close socket descriptor and exit.
 #Cấp phát bộ nhớ trên Heap: Dùng brk, sbrk, malloc, calloc,..Thay đổi kích thước phân vùng heap bằng cách tăng giảm giá trị program break. Sau khi program break tăng, process có thể truy cập vào vùng nhớ mới được cấp phát, nhưng đấy chỉ là trên không gian địa chỉ ảo. Địa chỉ vật lý sẽ tự độgn cấp phát khi process truy cập lần đầu vào chúng.
 - Cấp phát trên Stack: Dùng alloca. Do cấp phát ở stack nên tự thu hồi.
 
++ Memory mapping là kỹ thuật tạo ra vùng nhớ ánh xạ trên không gian bộ nhớ ảo cảu tiến trình. Vùng nhớ này có thể ánh xạ đến một file hoặc không file nào, có thể đặt private hoạc shared
+# Dùng system call mmap() để thực hiệm memory mapping. Vùng nhớ ánh xạ có thể chia sẻ giữa các process (cùng trỏ đến vùng nhớ giống nhau trên RAM. Khi 2 hoạc nhiều tiến trình chia sẻ vungf nhớ, sự thay đổi có thể được nhìn thấy tùy thuộc vào vung mapping là private  hay shared.
+- Các bước tạo ra file mapping
+- 1.Lấy giá trị fd file cần map, dùng systemcall open()
+- 2.Truyền fd vào đối số của mmap()
+- Sau 2 bước này, mmap() sẽ ánh xạ nội dung file vào địa chỉ bộ nhớ ảo cảu tiến trình gọi
++ Private file mapping: nếu truyền cờ MAP_PRIVATE, vùng nhớ mapping thiết lập ché độ private. Sau khởi tạo vungf nhớ mapping được khởi tạo ở vùng nhớ tương ứng trong file. Nhiều tiến trình có thể cùng map đến file. Kernel dùng kỹ thuật copy-on-write, nếu một process thay đổi vùng nhớ map đến file, kernel tạo ra vung nhớ riêng biệt cho tiến trình đó, sự thay đổi sẽ không thay dổi nội dung file trong vung nhớ tiến trình đó.
+#Shared file mapping: truyền cờ MAP_SHARED. Nếu 1 process thay đổi vùng nhớ này, các tiến trình khác sẽ nhìn thấy sự thay dổi. Shared file ứng dụng trong 2 trường hợp:
+#1.Memory-mapped IO: Nội dung của file được tải vào 1 vùng nhớ trong bộ nhớ ảo của process, chỉ cần thay đổi nội dung vùng nhớ thì sẽ thay đổi nội dung file (Dùng thay thế cho read(), write()). Tối ưu hiệu năng, tieét kiệm bộ nhớ  hơn read(), write() thông thường vì dùng read, write phải copy 2 lần giữa RAM và bộ nhớ đệm kernel, bộ nhớ đệm kernel và bộ nhớ đệm user. mmap() sẽ loại bỏ bước 2, copy thẳng giữa RAM và user 
+#2.IPC 
+

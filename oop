@@ -39,3 +39,13 @@
 2.Constructor có tham số
 3.Constructor sao chép
 #Thuộc tính tĩnh- static data member: 1 bản duy nhất tồn tại trong suốt quá trình chạy của chương trình, dùng chung cho tất cả đối tượng của class, phải định nghĩa bên ngoài clss
+
+- Hàm bạn:
+-Hàm bạn không thuộc về class của bạn mình (ví dụ: DienTich ko thuộc HinhChuNhat, ko thể gọi DienTich từ HCN được);-
+-Thông thường hàm bạn có tham sô truyền vào là một object=>ko biết bạn của ai;
+-Hàm bạn không thể truy cập các thuộc tính của hàm bạn mình.
+-Hàm bạn khai báo trong public hay private đều được
+-Phuowng thức của một class có thể làm bạn của một class khác
+
++Nap chồng toán tử có 3 cách: member-function, non-member function, friend member function. Member function bị giới hạn tham số truyền vào, dùng non-mem phải dùng getter và setter để truy cập vào thuộc tính private. Dùng friend function linh hoạt hơn.
+#Dung getter và setter để lấy dữ liệu private ra sử dụng

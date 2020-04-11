@@ -56,3 +56,17 @@ Dạng 2 – Runtime Polymorphism: Cùng một class có thể cho ra nhiều bi
 
 +Nap chồng toán tử có 3 cách: member-function, non-member function, friend member function. Member function bị giới hạn tham số truyền vào, dùng non-mem phải dùng getter và setter để truy cập vào thuộc tính private. Dùng friend function linh hoạt hơn.
 #Dung getter và setter để lấy dữ liệu private ra sử dụng
+
+-Virtual: thêm trước phương thức
+- Chỉ hoạt động thông qua con trỏ
+- chỉ cần thêm trước khai báo, không cần them trước định nghĩa
+- nếu 1 hàm khai báo là ảo ở lớp cơ sở, nó sẽ ảo ở mọi lớp con
+- Tên phương thức ở lớp cơ sở và dẫn xuất phải trung nhau
+
++ lớp trừu tượng là lớp có ít nhất 1 phương thức thuần ảo, có thuộc tính và phương thức như lớp bình thường
++ phương thức thuần ảo bắt đầu bằng virtual và kết thúc bằng 0. VD: virtual void f() = 0;
++ Không thể tạo đối tượng từ lớp trừu tượng, nhứng có thể tạo con trỏ và tham chiếu
++ Lớp trừu tượng dùng cho mục đích chủ yếu là trỏ đến lớp con (upcasting
++ lớp kế thừa từ lớp thuần ảo cũng phải định nghĩa hàm thuần, nếu không lớp đó cũng thành lớp trừu tượng
+
+-

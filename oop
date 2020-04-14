@@ -69,4 +69,4 @@ Dạng 2 – Runtime Polymorphism: Cùng một class có thể cho ra nhiều bi
 + Lớp trừu tượng dùng cho mục đích chủ yếu là trỏ đến lớp con (upcasting
 + lớp kế thừa từ lớp thuần ảo cũng phải định nghĩa hàm thuần, nếu không lớp đó cũng thành lớp trừu tượng
 
--
+-Dùng phương thức ảo khi ở class cha có thông tin tính toán được, nếu ko tính toán mà chỉ tính toán ở các class con, dùng phương thức thuần ảo

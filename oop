@@ -70,3 +70,32 @@ Dạng 2 – Runtime Polymorphism: Cùng một class có thể cho ra nhiều bi
 + lớp kế thừa từ lớp thuần ảo cũng phải định nghĩa hàm thuần, nếu không lớp đó cũng thành lớp trừu tượng
 
 -Dùng phương thức ảo khi ở class cha có thông tin tính toán được, nếu ko tính toán mà chỉ tính toán ở các class con, dùng phương thức thuần ảo
+
+
+
+
+
+
+
+
+----------------------Tong ket------------------------------------
+1.Con trỏ this
+Mỗi đối tượng trong C++ có sự truy cập tới vị trí riêng của nó thông qua một con trỏ quan trọng gọi là con trỏ this. Con trỏ this trong C++ là một từ khóa đề cập đến thể hiện hiện tại của lớp, là một tham số ẩn với tất cả hàm thành viên. Vì thế, bên trong một hàm thành viên, con trỏ this có thể tham chiếu tới đối tượng đang gọi.
+Các hàm friend không có con trỏ this, bởi vì friend không phải là các thành viên của một lớp. Chỉ có các hàm thành viên trong C++ là có con trỏ this.
+
+2.Static
+Khi chúng ta khai báo một thành viên của một lớp là static, khi đó dù cho có bao nhiêu đối tượng của lớp được tạo, thì sẽ chỉ có một bản sao của thành viên static.Một thành viên static chỉ cần khởi tạo 1 lần và được chia sẻ cho tất cả đối tượng của lớp. Tất cả dữ liệu static được khởi tạo về 0 khi đối tượng đầu tiên được tạo. Chúng ta không thể khởi tạo thành viên static trong định nghĩa lớp, nhưng nó có thể được định nghĩa bên ngoài lớp đó bởi việc khai báo lại biến static như trong ví dụ sau, sử dụng toán tử phân giải phạm vi :: để nhận diện lớp nào sở hữu nó
+Biến static là private, dùng hàm static getter ở tầm vực public để có thể truy cập
+
+
+3.Template
+“Template” là từ khóa trong C++, chúng ta có thể hiểu rằng là nó một kiểu dữ liệu trừu tượng, đặc trưng cho các kiểu dữ liệu cơ bản. “Template” là từ khóa báo cho trình biên dịch rằng đoạn mã sau đây định nghĩa cho nhiều kiểu dữ liệu và mã nguồn của nó sẽ được compile sinh ra tương ứng cho từng kiểu dữ liệu trong quá trình biên dịch.
+
+Có 2 loại “template” cơ bản:
+
+Function template: là một khuôn mẫu hàm, cho phép định nghĩa các hàm tổng quát thao tác cho nhiều kiểu dữ liệu.
+Class template: là một khuôn mẫu lớp, cho phép định nghĩa các lớp tổng quát cho nhiều kiểu dữ liệu.
+
+4.Hàm bạn
+Nếu một hàm được định nghĩa là một hàm bạn (Friend function) trong C++, thì dữ liệu được bảo vệ (protected) và riêng tư (private) của một lớp có thể được truy cập bằng cách sử dụng hàm. Hàm bạn phải truy cập dữ liệu thông qua đối tượng vì không phải hàm thành viên.
+Một lớp bạn (friend class) có thể truy cập cả các thành viên riêng tư và được bảo vệ của lớp mà nó đã được khai báo là friend.Khi một lớp trở thành một lớp bạn, mọi hàm thành viên của lớp đó đều trở thành hàm bạn.

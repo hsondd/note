@@ -79,16 +79,25 @@ Dạng 2 – Runtime Polymorphism: Cùng một class có thể cho ra nhiều bi
 
 
 ----------------------Tong ket------------------------------------
-1.Con trỏ this
+0. 4 thuộc tính
+* Tính đóng gói (Encapsulation) chỉ đơn giản là việc kết hợp một bộ các dữ liệu (data) liên quan đến nhau cùng với một bộ các hàm/phương thức (functions/methods) hoạt động trên các dữ liệu đó, “gói” tất cả vào trong một cái gọi là class.  Các thực thể của các class thì được gọi là các đối tượng (objects) trong khi class giống như một công thức được sử dụng để tạo ra các đối tượng đó.
+* Tính trừu tượng: Mục tiêu chính của nó là làm giảm sự phức tạp bằng cách ẩn các chi tiết không liên quan. Tập trung vào cốt lõi của đối tượng, các data và phương thức không cần thiết sẽ ko public ra bên ngoài class
+* Tính kế thừa: Là kỹ thuật cho phép kế thừa lại những tính năng mà một đối tượng khác đã có, giúp tránh việc code lặp dư thừa mà chỉ xử lý công việc tương tự.
+* Tính đa hình (polymorphism): Là một đối tượng thuộc các lớp khác nhau có thể hiểu cùng một thông điệp theo cách khác nhau.
+1. Con trỏ this
 Mỗi đối tượng trong C++ có sự truy cập tới vị trí riêng của nó thông qua một con trỏ quan trọng gọi là con trỏ this. Con trỏ this trong C++ là một từ khóa đề cập đến thể hiện hiện tại của lớp, là một tham số ẩn với tất cả hàm thành viên. Vì thế, bên trong một hàm thành viên, con trỏ this có thể tham chiếu tới đối tượng đang gọi.
 Các hàm friend không có con trỏ this, bởi vì friend không phải là các thành viên của một lớp. Chỉ có các hàm thành viên trong C++ là có con trỏ this.
 
-2.Static
-Khi chúng ta khai báo một thành viên của một lớp là static, khi đó dù cho có bao nhiêu đối tượng của lớp được tạo, thì sẽ chỉ có một bản sao của thành viên static.Một thành viên static chỉ cần khởi tạo 1 lần và được chia sẻ cho tất cả đối tượng của lớp. Tất cả dữ liệu static được khởi tạo về 0 khi đối tượng đầu tiên được tạo. Chúng ta không thể khởi tạo thành viên static trong định nghĩa lớp, nhưng nó có thể được định nghĩa bên ngoài lớp đó bởi việc khai báo lại biến static như trong ví dụ sau, sử dụng toán tử phân giải phạm vi :: để nhận diện lớp nào sở hữu nó
+2. Static
+* Khi chúng ta khai báo một thành viên của một lớp là static, khi đó dù cho có bao nhiêu đối tượng của lớp được tạo, thì sẽ chỉ có một bản sao của thành viên static.Một thành viên static chỉ cần khởi tạo 1 lần và được chia sẻ cho tất cả đối tượng của lớp. Tất cả dữ liệu static được khởi tạo về 0 khi đối tượng đầu tiên được tạo. Chúng ta không thể khởi tạo thành viên static trong định nghĩa lớp, nhưng nó có thể được định nghĩa bên ngoài lớp đó bởi việc khai báo lại biến static như trong ví dụ sau, sử dụng toán tử phân giải phạm vi :: để nhận diện lớp nào sở hữu nó
 Biến static là private, dùng hàm static getter ở tầm vực public để có thể truy cập
 
+* Biến static trong Hàm: Khi một biến được khai báo với từ khóa static, vùng nhớ cho nó tồn tại theo vòng đời của chương trình. Ngay cả khi hàm được gọi nhiều lần, vùng nhớ cho biến static chỉ được cấp nhát một lần và giá trị của biến trong những lần gọi trước đó được lưu lại và được sử dụng để thực hiện thông qua các lượt gọi hàm tiếp theo.
+* Các biến static trong class: Vì các biến được khai báo là tĩnh chỉ được khởi tạo một lần khi chúng được cấp phát một địa chỉ trong bộ lưu trữ tĩnh riêng biệt, do đó, các biến tĩnh trong một lớp được chia sẻ bởi các đối tượng. Chúng ta không tạo ra các bản sao cho cùng một biến tĩnh của các đối tượng khác nhau. Cũng vì lý do này mà các biến tĩnh không thể được khởi tạo bằng cách sử dụng các hàm khởi tạo 
+Cũng giống như các biến, các đối tượng cũng khi được khai báo là static có thời gian tồn tại bằng với thời gian tồn tại của chương trình. Các hàm static trong class: Giống như các thành viên kiểu static hoặc các biến static bên trong class, các hàm static cũng không phụ thuộc vào đối tượng của class. Cho phép gọi một hàm thành viên static bằng cách sử dụng đối tượng và toán tử "." . Nhưng nên gọi các thành viên static bằng cách sử dụng tên lớp và toán tử phân giải phạm vi. Các hàm thành viên tĩnh chỉ được phép truy cập các thành viên dữ liệu kiểu static hoặc các hàm thành viên static khác, chúng không thể truy cập các thành viên không phải kiểu static của class.
 
-3.Template
+
+3. Template
 “Template” là từ khóa trong C++, chúng ta có thể hiểu rằng là nó một kiểu dữ liệu trừu tượng, đặc trưng cho các kiểu dữ liệu cơ bản. “Template” là từ khóa báo cho trình biên dịch rằng đoạn mã sau đây định nghĩa cho nhiều kiểu dữ liệu và mã nguồn của nó sẽ được compile sinh ra tương ứng cho từng kiểu dữ liệu trong quá trình biên dịch.
 
 Có 2 loại “template” cơ bản:
@@ -96,6 +105,34 @@ Có 2 loại “template” cơ bản:
 Function template: là một khuôn mẫu hàm, cho phép định nghĩa các hàm tổng quát thao tác cho nhiều kiểu dữ liệu.
 Class template: là một khuôn mẫu lớp, cho phép định nghĩa các lớp tổng quát cho nhiều kiểu dữ liệu.
 
-4.Hàm bạn
+4. Hàm bạn
 Nếu một hàm được định nghĩa là một hàm bạn (Friend function) trong C++, thì dữ liệu được bảo vệ (protected) và riêng tư (private) của một lớp có thể được truy cập bằng cách sử dụng hàm. Hàm bạn phải truy cập dữ liệu thông qua đối tượng vì không phải hàm thành viên.
 Một lớp bạn (friend class) có thể truy cập cả các thành viên riêng tư và được bảo vệ của lớp mà nó đã được khai báo là friend.Khi một lớp trở thành một lớp bạn, mọi hàm thành viên của lớp đó đều trở thành hàm bạn.
+5. Const vs variable: Không làm thay đổi giá trị biến
+*Const vs pointer: 
+** int const *ptr = const int *ptr (Pointer to const): Được phép thay đổi con trỏ ptr, ko được phép thay đổi giá trị trỏ tới
+** int* const ptr (const pointer): không được phép thay đổi con trỏ ptr, được phép thay đổi giá trị nói trỏ tới
+
+* Const vs function: Một hàm nếu muốn truyền tham chiếu đến một hằng const, khi khai báo param cần định nghĩa param được truyền vào là const. Trường hợp cần truyền một const vào một biến tham chiếu của hàm. Nhưng biến không được khai báo const. Sử dụng từ khóa const_cast:
+* Const vs class: Khi khai báo một class const: các giá trị của class tại thời điểm khai báo sẽ không bị thay đổi trong quá trình chạy trương trình. Trong trường hợp muốn tạo class kiểu const, nhưng vẫn muốn một số giá trị có thể thay đổi, trong trường hợp này có thể sử dụng từ khóa mutable
+Sử dụng "const" với hàm trong class: Khi một hàm được khai báo const tại vị trí sau khi định nghĩa hàm, nó có thể được gọi trên bất kỳ loại đối tượng nào. Các hàm không phải const chỉ có thể được gọi bởi các đối tượng không phải const
+
+6. virtual table
+* Con trỏ _vptr là con trỏ được tạo ra mỗi khi một đối tượng (class định nghĩa đối tượng này có khai báo virtual function) được tạo ra khai báo.
+* Khi một đối tượng được tạo ra, đồng thời con trỏ _vptr cũng sẽ được tạo ra để trỏ đến virtual table của đối tượng đó
+* Virtual Table là một bảng tra cứu các phương thức được sử dụng để giải quyết các lệnh gọi hàm trong quá trình late binding. , tất cả những lớp có sử dụng phương thức ảo (hoặc kế thừa từ một lớp có sử dụng phương thức ảo) đều sở hữu Virtual Table. Bảng này thực chất là một mảng tĩnh được trình biên dịch thiết lập trong quá trình biên dịch (compile time). Mỗi một Virtual Table đều có ô chứa cho từng phương thức ảo có thể được truy xuất từ đối tượng của lớp. Mỗi ô chứa trong Virtual Table thực chất là một con trỏ hàm trỏ đến phương thức được kế thừa gần nhất và có thể truy cập từ lớp này.
+* Nếu một hàm được định nghĩa là một hàm bạn (Friend function) trong C++, thì dữ liệu được bảo vệ (protected) và riêng tư (private) của một lớp có thể được truy cập bằng cách sử dụng hàm.
+* Một lớp bạn (friend class) có thể truy cập cả các thành viên riêng tư và được bảo vệ của lớp mà nó đã được khai báo là friend.
+7. Copy constructor
+* Hàm xây dựng sao chép (Copy Constructor) trong C++ là một hàm xây dựng được sử dụng để khai báo và khởi tạo một đối tượng từ một đối tượng khác.
+* Trong C++ có hai loại copy được tạo bởi hàm xây dựng đó là:
+** Shallow copy: Hàm xây dựng sao chép mặc định chỉ có thể tạo shallow copy Shallow copy được định nghĩa là quá trình tạo bản sao của một đối tượng bằng cách sao chép dữ liệu của tất cả các biến thành viên
+** Deep copy: Deep copy tự động cấp phát bộ nhớ cho bản sao và sau đó sao chép giá trị thực cho bản sao, cả nguồn và bản sao có vị trí bộ nhớ khác nhau. Theo cách này, cả nguồn và bản sao là khác nhau và sẽ không chia sẻ cùng một vị trí bộ nhớ. Deep copy yêu cầu chúng ta viết hàm xây dựng do người dùng định nghĩa
+* Truyền tham trị
+** Một bản sao giá trị của biến được truyền vào hàm
+** Những thay đổi trong hàm được giới hạn trong hàm, không làm thay đổi giá trị của biến được truyền vào hàm
+** Đối số trong hàm và tham số chính thức được tạo tại hai vị trí bộ nhớ khác nhau
+* Truyền tham chiếu:
+**  Một địa chỉ ô nhớ của biến được truyền vào hàm
+** Những thay đổi không chỉ giới hạn trong hàm mà còn làm thay đổi giá trị của biến được truyền vào hàm nếu trong hàm cũng làm thay đổi giá trị biến đó
+** Đối số trong hàm và tham số chính thức được tạo tại cùng một vị trí bộ nhớ

@@ -1,10 +1,10 @@
 - Object: Đối tượng là một thực thể trong đời thực. Một đối tượng có thuộc tính và phương thức. VD: Con chó có thuộc tính màu, lông, tuổi, giống,..Phương thức: sủa, ăn, tiêu hóa, chạy. Đối tượng là thể hiện của 1 lớp, tát cả các thành viên cua lớp được truy cập thông qua đối tượng
 + Class: Là 1 nhóm của đối tượng. Một class sẽ định nghĩa danh sách những tính chất và phương thức đối tuowjjng trong class sở hữu.
-# Trừu tượng(Abstraction): Mục tiêu chính của nó là làm giảm sự phức tạp bằng cách ẩn các chi tiết không liên quan trực tiếp tới người dùng (người dùng ở đây không phải người dùng cuối mà là lập trình viên). Điều đó cho phép người dùng vẫn thực hiện được các công việc cần thiết dựa trên một thực thể trừu tượng được cung cấp mà không cần hiểu hoặc thậm chí không nghĩ về tất cả sự phức tạp ẩn giấu bên trong..Tập trung vào cốt lõi của đối tượng, không quan tâm những thứ ko liên quan. Ví dụ: Khi nói cái quạt chỉ biết là vật làm mát ko biết là quạt cây, quạt treo tường
+ Trừu tượng(Abstraction): Mục tiêu chính của nó là làm giảm sự phức tạp bằng cách ẩn các chi tiết không liên quan trực tiếp tới người dùng (người dùng ở đây không phải người dùng cuối mà là lập trình viên). Điều đó cho phép người dùng vẫn thực hiện được các công việc cần thiết dựa trên một thực thể trừu tượng được cung cấp mà không cần hiểu hoặc thậm chí không nghĩ về tất cả sự phức tạp ẩn giấu bên trong..Tập trung vào cốt lõi của đối tượng, không quan tâm những thứ ko liên quan. Ví dụ: Khi nói cái quạt chỉ biết là vật làm mát ko biết là quạt cây, quạt treo tường
 Dữ liệu (data) và một số hàm (methods) không cần thiết đưa ra bên ngoài sẽ được đưa vào trong class và chỉ định đặc tả truy cập là private (hoặc protected). Các data hoặc methods đó sẽ không thể truy cập từ bên ngoài của class đó. Ở cảnh giới này trừu tượng giúp cho code dễ hiểu hơn vì nó tập trung vào các tính năng / hành động cốt lõi và không tập trung vào các chi tiết nhỏ nhặt. Ngoài ra nó còn giúp chương trình dễ bảo trì, hạn chế lỗi do truy cập data bừa bãi, sai cách. Ở level này có thể coi Abstraction = Encapsulation + Data Hiding
 - Tính đóng gói (encapsulation): Tính đóng gói (Encapsulation) chỉ đơn giản là việc kết hợp một bộ các dữ liệu (data) liên quan đến nhau cùng với một bộ các hàm/phương thức (functions/methods) hoạt động trên các dữ liệu đó, “gói” tất cả vào trong một cái gọi là class.  Các thực thể của các class thì được gọi là các đối tượng (objects) trong khi class giống như một công thức được sử dụng để tạo ra các đối tượng đó.
 + Tính thừa kế (inheritance): Ưu điểm của đặc tính kế thừa: sử dụng lại các đoạn code đã có trong chương trình 1 cách hiệu quả. Khi tạo 1 class, thay vì việc viết 1 class mới hoàn toàn, người lập trình viên có thể kế thừa một số thuộc tính và phương thức từ 1 class đã có trong project. Class đã có trước đấy gọi là lớp cơ sở (Base Class), class kế thừa từ Base Class (hay superclass) gọi là lớp dẫn xuất (Derived Class).
-# Tính đa hình (polymorphism): Polymorphism có 2 dạng:
+ Tính đa hình (polymorphism): Polymorphism có 2 dạng:
 
 Dạng 1 – Compile time Polymorphism: Một class có nhiều hàm cùng tên nhưng khác nhau về số lượng tham số hoặc kiểu dữ liệu của tham số. Khi call hàm cùng tên đó thì trong quá trình biên dịch, compiler sẽ quyết định hàm nào (trong số các hàm cùng tên) sẽ được call dựa trên số lượng tham số và kiểu dữ liệu của tham số truyển vào hàm. Việc định nghĩa các hàm cùng tên được gọi là overloading – nạp chồng hàm.
 Dạng 2 – Runtime Polymorphism: Cùng một class có thể cho ra nhiều biến thể, không phải được định nghĩa bởi lớp đó, mà bởi các lớp con của nó. Đây là một phương pháp để định nghĩa lại hành vi của lớp cơ sở mà không phải sửa code (còn gọi là implementation) của lớp cơ sở. Nếu call hàm của đối tượng của lớp dẫn xuất thông qua con trỏ của lớp cơ sở thì việc hàm nào (của lớp cơ sở hay). Runtime Polymorphism được thực hiện bằng phương pháp overriding – ghi đè phương thức.
@@ -37,13 +37,13 @@ Dạng 2 – Runtime Polymorphism: Cùng một class có thể cho ra nhiều bi
 	    return 0;
 	}
 + Co 2 cach dinh nghia phuong thuc class, Khai bao va dinh nghia trong class, hai bao trong class va dinh nghia ben ngoai. Cu phap: KieuTraVe TenClass::TenPhuongThuc
-# Con trỏ this tham chiếu đến đối tượng đang gọi hàm thành phần. . Con trỏ this trong C++ là một từ khóa đề cập đến thể hiện hiện tại của lớp, là một tham số ẩn với tất cả hàm thành viên. Vì thế, bên trong một hàm thành viên, con trỏ this có thể tham chiếu tới đối tượng đang gọi. Cach 1: Trỏ đến thành phần class hiện tại, Cách 2: Trả về object hiện tại
+ Con trỏ this tham chiếu đến đối tượng đang gọi hàm thành phần. . Con trỏ this trong C++ là một từ khóa đề cập đến thể hiện hiện tại của lớp, là một tham số ẩn với tất cả hàm thành viên. Vì thế, bên trong một hàm thành viên, con trỏ this có thể tham chiếu tới đối tượng đang gọi. Cach 1: Trỏ đến thành phần class hiện tại, Cách 2: Trả về object hiện tại
 - Đối tượng có thể là tham số truyền vào của phương thức
 + Hàm khởi tạo- Constructor là hàm mặc định được dùng để khởi tạo đối tượng, cùng tên với class, khong co kieu tra ve, va phải trong tầm vực public. Có 3 loại
 1Constructor mặc định
 2.Constructor có tham số
 3.Constructor sao chép
-#Thuộc tính tĩnh- static data member: 1 bản duy nhất tồn tại trong suốt quá trình chạy của chương trình, dùng chung cho tất cả đối tượng của class, phải định nghĩa bên ngoài clss
+Thuộc tính tĩnh- static data member: 1 bản duy nhất tồn tại trong suốt quá trình chạy của chương trình, dùng chung cho tất cả đối tượng của class, phải định nghĩa bên ngoài clss
 
 - Hàm bạn:
 -Hàm bạn trong c++ là hàm tự do, không thuộc lớp. Tuy nhiên hàm bạn trong c++ có quyền truy cập các thành viên private của lớp.
@@ -78,7 +78,7 @@ Dạng 2 – Runtime Polymorphism: Cùng một class có thể cho ra nhiều bi
 
 
 
-----------------------Tong ket------------------------------------
+# ----------------------Tong ket------------------------------------
 0. 4 thuộc tính
 * Tính đóng gói (Encapsulation) chỉ đơn giản là việc kết hợp một bộ các dữ liệu (data) liên quan đến nhau cùng với một bộ các hàm/phương thức (functions/methods) hoạt động trên các dữ liệu đó, “gói” tất cả vào trong một cái gọi là class.  Các thực thể của các class thì được gọi là các đối tượng (objects) trong khi class giống như một công thức được sử dụng để tạo ra các đối tượng đó.
 * Tính trừu tượng: Mục tiêu chính của nó là làm giảm sự phức tạp bằng cách ẩn các chi tiết không liên quan. Tập trung vào cốt lõi của đối tượng, các data và phương thức không cần thiết sẽ ko public ra bên ngoài class
@@ -128,6 +128,7 @@ Sử dụng "const" với hàm trong class: Khi một hàm được khai báo co
 * Trong C++ có hai loại copy được tạo bởi hàm xây dựng đó là:
 ** Shallow copy: Hàm xây dựng sao chép mặc định chỉ có thể tạo shallow copy Shallow copy được định nghĩa là quá trình tạo bản sao của một đối tượng bằng cách sao chép dữ liệu của tất cả các biến thành viên
 ** Deep copy: Deep copy tự động cấp phát bộ nhớ cho bản sao và sau đó sao chép giá trị thực cho bản sao, cả nguồn và bản sao có vị trí bộ nhớ khác nhau. Theo cách này, cả nguồn và bản sao là khác nhau và sẽ không chia sẻ cùng một vị trí bộ nhớ. Deep copy yêu cầu chúng ta viết hàm xây dựng do người dùng định nghĩa
+8. 
 * Truyền tham trị
 ** Một bản sao giá trị của biến được truyền vào hàm
 ** Những thay đổi trong hàm được giới hạn trong hàm, không làm thay đổi giá trị của biến được truyền vào hàm
@@ -136,3 +137,11 @@ Sử dụng "const" với hàm trong class: Khi một hàm được khai báo co
 **  Một địa chỉ ô nhớ của biến được truyền vào hàm
 ** Những thay đổi không chỉ giới hạn trong hàm mà còn làm thay đổi giá trị của biến được truyền vào hàm nếu trong hàm cũng làm thay đổi giá trị biến đó
 ** Đối số trong hàm và tham số chính thức được tạo tại cùng một vị trí bộ nhớ
+
+9. Lỗi Segment fault
+* Có 5 lỗi phổ biến dẫn đến lỗi “segmentation fault” đó là
+** Dereferencing con trỏ NULL
+** Dereferencing con trỏ chưa được khởi tạo
+** Dereferencing con trỏ đã bị free hoặc delete
+** Ghi giá trị vượt quá giới hạn của mảng
+** Hàm đệ quy sử dụng hết vùng bộ dành cho stack – còn gọi là “stack overflow”

@@ -27,7 +27,7 @@
 +Initialized data segment(bss): Vùng này chứa các biến toàn cục (global) và biến static mà đã được khởi tạo từ code của chương trình. Giá trị của các biến này được đọc từ các file thực thi khi chương trình được tải vào RAM
 #Uninitialized data segment: Còn được gọi là vùng bss segment. Segment này chứa các biến toàn cục và static mà 'chưa' được khởi tạo từ source code. Ví dụ khi lập trình viên khai báo biến tĩnh “static var;”, biến var sẽ được chứa ở vùng này và được khởi tạo giá trị 0, khi một chương trình được lưu trữ vào ổ cứng, không cần thiết phải cấp phát tài nguyên cho uninitialized data segment; thay vào đó chương trình chỉ cần nhớ vị trí và kích thước biến được yêu cầu cho vùng này, các biến này sẽ được cấp phát run time khi chương trình được tải vào RAM.
 -Stack segment: Chứa stack frame của tiến trình.y. Tạm thời hiểu là khi 1 hàm được gọi, một stack frame sẽ được cấp phát cho hàm đó (các biến được khai báo trong hàm, các đối số truyền vào hay giá trị return) và sẽ bị thu hồi khi hàm đó kết thúc. Vì vậy, stack segment có thể giãn ra hoặc co lại khi tiến trình cấp phát/thu hồi các stack frame.
- Khi một hàm được gọi, một stack frame của hàm đó được cấp phát và push vào stack; và stack frame này sẽ được thu hồi khi hàm đó return.
+
 Mỗi stack frame chứa các thông tin sau:
 1.Đối số (argument) của hàm và các biến cục bộ (local variable): Các biến này còn được gọi là biến tự động (automatic variable) vì chúng sẽ tự động được tạo ra khi hàm được gọi và tự động biến mất khi hàm đó return (vì stack frame cũng biến mất).
 2.Call linkage information: Các hàm khi chạy sẽ sử dụng các thanh ghi của CPU, ví dụ như thanh ghi program counter (pc) lưu chỉ lệnh tiếp theo được thực thi. Mỗi lần một hàm (ví dụ hàm X) gọi hàm khác (ví dụ hàm Y), giá trị các thanh ghi mà hàm X đang dùng sẽ được lưu vào stack frame của hàm Y; và sau khi hàm Y return, các giá trị thanh ghi này sẽ được phục hồi cho hàm X tiếp tục chạy.
@@ -53,7 +53,7 @@ Shared memory
 #Các thread trong tiến trình chia sẻ các vùng nhớ toàn cục (global memory) của tiến trình bao gồm initialized data, uninitialized data và vùng nhớ heap
 Một thread đang thực thi có thể được kết thúc bằng một trong các cách sau:
 1.Hàm bắt đầu của thread thực thi câu lệnh return
-2.Một hàm bất kỳ trong thread gọi hàm pthread_exit(), chúng ta sẽ nói về hàm này ở dưới đây
+2.Một hàm bất kỳ trong thread gọi hàm pthread_exit()
 3.Thread bị hủy bỏ bằng hàm pthread_cancel()
 4.Một thread bất kỳ của tiến trình gọi hàm exit() hoặc thread chính của tiến trình (hàm main()) gọi return. Cả 2 cách này đều có tác dụng kết thúc tiến trình đang chạy và tất nhiên cả các thread của tiến trình đó.
 -một thread được tạo ra cũng giống như một tiến trình con, cần phải được theo dõi trạng thái và thu hồi tài nguyên khi kết thúc, tránh việc tạo ra zombie thread gây lãng phí tài nguyên của tiến trình
@@ -156,4 +156,29 @@ Close socket descriptor and exit.
 #Shared file mapping: truyền cờ MAP_SHARED. Nếu 1 process thay đổi vùng nhớ này, các tiến trình khác sẽ nhìn thấy sự thay dổi. Shared file ứng dụng trong 2 trường hợp:
 #1.Memory-mapped IO: Nội dung của file được tải vào 1 vùng nhớ trong bộ nhớ ảo của process, chỉ cần thay đổi nội dung vùng nhớ thì sẽ thay đổi nội dung file (Dùng thay thế cho read(), write()). Tối ưu hiệu năng, tieét kiệm bộ nhớ  hơn read(), write() thông thường vì dùng read, write phải copy 2 lần giữa RAM và bộ nhớ đệm kernel, bộ nhớ đệm kernel và bộ nhớ đệm user. mmap() sẽ loại bỏ bước 2, copy thẳng giữa RAM và user 
 #2.IPC 
+
+
+
+
+# ------------------------------------Tong ket-----------------------------------
+1. So sánh process và thread
+* Process: 
+  * Là chương trình đang thực thi
+  * Mất nhiều thời gian để tạo, để terminate
+  * Mỗi tiến trình là 1 thực thể cô lập và không chia sẻ thông tin
+  * Sử dụng cơ chế IPC làm tăng đáng kể lời gọi hàm hệ thống
+  * 
+* Thread
+  * Là segment của 1 process
+  * Lightweight
+  * Tạo và hủy dễ dàng hơn
+  * Giao tiếp giữa các thread dễ dàng hơn
+  * Thread chia sẻ bộ nhớ với nhau
+
+2. Các thành phần embedded linux
+* Toolchain: compiler, linker, sysroot
+* Bootloader(load kernel vào RAM)
+* Kernel
+* Userspace application
+
 

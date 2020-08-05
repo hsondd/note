@@ -110,8 +110,8 @@ Nếu một hàm được định nghĩa là một hàm bạn (Friend function) 
 Một lớp bạn (friend class) có thể truy cập cả các thành viên riêng tư và được bảo vệ của lớp mà nó đã được khai báo là friend.Khi một lớp trở thành một lớp bạn, mọi hàm thành viên của lớp đó đều trở thành hàm bạn.
 5. Const vs variable: Không làm thay đổi giá trị biến
 *Const vs pointer: 
-** int const *ptr = const int *ptr (Pointer to const): Được phép thay đổi con trỏ ptr, ko được phép thay đổi giá trị trỏ tới
-** int* const ptr (const pointer): không được phép thay đổi con trỏ ptr, được phép thay đổi giá trị nói trỏ tới
+  * int const *ptr = const int *ptr (Pointer to const): Được phép thay đổi con trỏ ptr, ko được phép thay đổi giá trị trỏ tới
+  * int* const ptr (const pointer): không được phép thay đổi con trỏ ptr, được phép thay đổi giá trị nói trỏ tới
 
 * Const vs function: Một hàm nếu muốn truyền tham chiếu đến một hằng const, khi khai báo param cần định nghĩa param được truyền vào là const. Trường hợp cần truyền một const vào một biến tham chiếu của hàm. Nhưng biến không được khai báo const. Sử dụng từ khóa const_cast:
 * Const vs class: Khi khai báo một class const: các giá trị của class tại thời điểm khai báo sẽ không bị thay đổi trong quá trình chạy trương trình. Trong trường hợp muốn tạo class kiểu const, nhưng vẫn muốn một số giá trị có thể thay đổi, trong trường hợp này có thể sử dụng từ khóa mutable
@@ -126,17 +126,17 @@ Sử dụng "const" với hàm trong class: Khi một hàm được khai báo co
 7. Copy constructor
 * Hàm xây dựng sao chép (Copy Constructor) trong C++ là một hàm xây dựng được sử dụng để khai báo và khởi tạo một đối tượng từ một đối tượng khác.
 * Trong C++ có hai loại copy được tạo bởi hàm xây dựng đó là:
-** Shallow copy: Hàm xây dựng sao chép mặc định chỉ có thể tạo shallow copy Shallow copy được định nghĩa là quá trình tạo bản sao của một đối tượng bằng cách sao chép dữ liệu của tất cả các biến thành viên
-** Deep copy: Deep copy tự động cấp phát bộ nhớ cho bản sao và sau đó sao chép giá trị thực cho bản sao, cả nguồn và bản sao có vị trí bộ nhớ khác nhau. Theo cách này, cả nguồn và bản sao là khác nhau và sẽ không chia sẻ cùng một vị trí bộ nhớ. Deep copy yêu cầu chúng ta viết hàm xây dựng do người dùng định nghĩa
+  * Shallow copy: Hàm xây dựng sao chép mặc định chỉ có thể tạo shallow copy Shallow copy được định nghĩa là quá trình tạo bản sao của một đối tượng bằng cách sao chép dữ liệu của tất cả các biến thành viên
+  * Deep copy: Deep copy tự động cấp phát bộ nhớ cho bản sao và sau đó sao chép giá trị thực cho bản sao, cả nguồn và bản sao có vị trí bộ nhớ khác nhau. Theo cách này, cả nguồn và bản sao là khác nhau và sẽ không chia sẻ cùng một vị trí bộ nhớ. Deep copy yêu cầu chúng ta viết hàm xây dựng do người dùng định nghĩa
 8. 
 * Truyền tham trị
-** Một bản sao giá trị của biến được truyền vào hàm
-** Những thay đổi trong hàm được giới hạn trong hàm, không làm thay đổi giá trị của biến được truyền vào hàm
-** Đối số trong hàm và tham số chính thức được tạo tại hai vị trí bộ nhớ khác nhau
+  * Một bản sao giá trị của biến được truyền vào hàm
+  * Những thay đổi trong hàm được giới hạn trong hàm, không làm thay đổi giá trị của biến được truyền vào hàm
+  * Đối số trong hàm và tham số chính thức được tạo tại hai vị trí bộ nhớ khác nhau
 * Truyền tham chiếu:
-**  Một địa chỉ ô nhớ của biến được truyền vào hàm
-** Những thay đổi không chỉ giới hạn trong hàm mà còn làm thay đổi giá trị của biến được truyền vào hàm nếu trong hàm cũng làm thay đổi giá trị biến đó
-** Đối số trong hàm và tham số chính thức được tạo tại cùng một vị trí bộ nhớ
+  *  Một địa chỉ ô nhớ của biến được truyền vào hàm
+  * Những thay đổi không chỉ giới hạn trong hàm mà còn làm thay đổi giá trị của biến được truyền vào hàm nếu trong hàm cũng làm thay đổi giá trị biến đó
+  * Đối số trong hàm và tham số chính thức được tạo tại cùng một vị trí bộ nhớ
 
 9. Lỗi Segment fault
 * Có 5 lỗi phổ biến dẫn đến lỗi “segmentation fault” đó là
@@ -145,3 +145,13 @@ Sử dụng "const" với hàm trong class: Khi một hàm được khai báo co
   * Dereferencing con trỏ đã bị free hoặc delete
   * Ghi giá trị vượt quá giới hạn của mảng
   * Hàm đệ quy sử dụng hết vùng bộ dành cho stack – còn gọi là “stack overflow”
+
+10. Lớp lưu trữ
+Có 5 loại:
+* register: biến cục bộ mà nên được lưu giữ trong một thanh ghi thay vì RAM
+* static
+* extern: Lớp lưu trữ extern được dùng phổ biến khi có hai hoặc nhiều file chia sẻ cùng biến hay hàm toàn cục
+* auto
+* mutable
+
+

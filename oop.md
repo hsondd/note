@@ -140,8 +140,8 @@ Sử dụng "const" với hàm trong class: Khi một hàm được khai báo co
 
 9. Lỗi Segment fault
 * Có 5 lỗi phổ biến dẫn đến lỗi “segmentation fault” đó là
-** Dereferencing con trỏ NULL
-** Dereferencing con trỏ chưa được khởi tạo
-** Dereferencing con trỏ đã bị free hoặc delete
-** Ghi giá trị vượt quá giới hạn của mảng
-** Hàm đệ quy sử dụng hết vùng bộ dành cho stack – còn gọi là “stack overflow”
+  * Dereferencing con trỏ NULL
+  * Dereferencing con trỏ chưa được khởi tạo
+  * Dereferencing con trỏ đã bị free hoặc delete
+  * Ghi giá trị vượt quá giới hạn của mảng
+  * Hàm đệ quy sử dụng hết vùng bộ dành cho stack – còn gọi là “stack overflow”

@@ -116,4 +116,33 @@ Cung cấp một điểm truy cập toàn cục tới instance này thay vì qua
 * Adapter pattern chuyển đổi interface của một class thành interface mà client yêu cầu.
 Adapter ở giữa gắn kết các lớp làm việc với nhau dù cho có những interface không tương thích với nhau.
 
+24. Lớp lưu trữ (Storage Class)
 
+* Lớp lưu trữ auto trong C/C++ là lớp lưu trữ mặc định cho tất cả biến cục bộ trong C/C++:
+* Lớp lưu trữ register trong C/C++ được sử dụng để định nghĩa các biến cục bộ mà nên được lưu giữ trong một thanh ghi thay vì RAM
+* Lớp lưu trữ static trong C/C++ nói với compiler để giữ một biến cục bộ tồn tại trong toàn bộ thời gian sống của chương trình thay vì tạo và hủy biến mỗi lần nó vào và ra khỏi phạm vi biến.
+* Lớp lưu trữ extern trong C/C++ được dùng để cung cấp một tham chiếu của một biến toàn cục được nhìn thấy bởi TẤT CẢ các file chương trình. Khi bạn sử dụng 'extern', biến không thể được khởi tạo, khi nó trỏ tới tên biến tại một vị trí lớp lưu trữ mà đã được định nghĩa trước đó
+* Lớp lưu trữ mutable trong C/C++ chỉ áp dụng cho các đối tượng class. Nó cho phép một thành viên của một đối tượng để override (ghi đè). Đó là, một thành viên là mutable có thể được sửa đổi bởi một hàm thành viên const.
+
+25. Atomic
+* std::atomic được gọi là lock-free . Nghĩa là khi dùng atomic thì khỏi cần dùng lock để chia sẻ tài nguyên giữa các thread. Đáng tiếc là atomic cũng chỉ hỗ trợ một số type nhất định ( có thể check bằng atomic::is_lock_free() , và không đảm bảo hỗ trợ giống nhau ở các platform khác nhau, tốt nhất nên check.
+
+26. Lock_guard
+
+* std::lock_guard cho phép bạn dùng mutex trong một đoạn code, thay vì phải tự lock và unlock ( đôi khi quên unlock là chương trình đơ luôn) chỉ cần gọi std::lock_guard.
+* Theo một số benmarch thì dùng lock_guard sẽ tốn ít CPU hơn dùng lock, unlock của mutex
+
+21. std::future 
+
+* std::future là một lớp template và đối tượng của nó lưu trữ giá trị tương lai. Thật vây, một đối tượng std::future lưu trữ bên trong một giá trị sẽ được gán trong tương lai và nó cũng cung cấp một cơ chế để truy cập giá trị đó, tức là sử dụng hàm thành viên get(). Nhưng nếu ai đó cố gắng truy cập giá trị này của tương lai thông qua hàm get() trước khi có sẵn, thì hàm get() sẽ chặn cho đến khi giá trị là khả dụng.
+
+22. std::promise 
+    
+* std::promise cũng là một lớp template và đối tượng của nó hứa sẽ set một giá trị trong tương lai. Mỗi đối tượng std::promise có một đối tượng std::future được liên kết tới, đối tương mà sẽ cho ra giá trị khi nó được set bởi std::promise.
+
+23. std :: pack_task
+
+* std :: pack_task <> là một lớp template và đại diện cho task thực thi không đồng bộ. Nó bao gồm:
+
+-  Một thực thể có thể gọi được. Đó có thể là hàm, hàm lambda hoặc đối tượng hàm.
+- Một trạng thái chia sẻ lưu trữ giá trị được trả về hoặc ném ngoại lệ bằng cách gọi hàm callback.

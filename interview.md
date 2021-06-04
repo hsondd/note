@@ -1,33 +1,35 @@
 -------------------------------------------------------------CPP--------------------------------------------------------------------
-- Namespace là một cơ chế trong C++, cho phép ta nhóm các thực thể (class, object, function…) có liên quan thành từng nhóm khác nhau theo tên, mà theo đó tên của mọi thực thể trong mỗi namespace đều được gắn thêm tên của namespace đó như tiền tố.
+1. Namespace là một cơ chế trong C++, cho phép ta nhóm các thực thể (class, object, function…) có liên quan thành từng nhóm khác nhau theo tên, mà theo đó tên của mọi thực thể trong mỗi namespace đều được gắn thêm tên của namespace đó như tiền tố.
 2. Từ khóa volatile làm gì
-Việc khai báo biến có thuộc tính volatile là rất cần thiết nhằm tránh các lỗi phát sinh ngoài ý muốn khi tính năng optimization của compiler được bật. Volatile để chỉ một biến có thể bị thay đổi giá trị một cách "bất thường". Có nghĩa là giá trị của biến có thể bị thay đổi mà không được báo trước
-3.Phân biệt Syntax-error, Runtime-error and Logical-error?
-Syntax-error: Lỗi cú pháp được phát hiện ngay khi biên dịch chương trình. Trình biên dịch sẽ thông báo lỗi tại cửa sổ Output
+- Việc khai báo biến có thuộc tính volatile là rất cần thiết nhằm tránh các lỗi phát sinh ngoài ý muốn khi tính năng optimization của compiler được bật. Volatile để chỉ một biến có thể bị thay đổi giá trị một cách "bất thường". Có nghĩa là giá trị của biến có thể bị thay đổi mà không được báo trước
+3. Phân biệt Syntax-error, Runtime-error and Logical-error?
+
+- Syntax-error: Lỗi cú pháp được phát hiện ngay khi biên dịch chương trình. Trình biên dịch sẽ thông báo lỗi tại cửa sổ Output
 Runtime-error: Chương trình đã được biên dịch thành công, gặp lỗi khi chạy chương trình do đầu vào hoặc đầu ra có giá trị không mong muốn
 Logical-error: Chương trình đã được biên dịch và chạy không gặp lỗi Runtime-error. Nhưng kết quả đầu ra không đúng theo yêu cầu do logic xử lý bài toán bị sai.
 4. Phân biệt biến Local, Global, Extern, Static và Const
 - Biến global
-Là biến được khai báo bên ngoài tất cả các hàm và có giá trị với tất cả các hàm trong chương trình. Tức là các hàm trong chương trình có thể sử dụng biến global để tính toán.
-Biến global tồn tại đến khi nào chương trình kết thúc.
-Có thể định nghĩa 1 biến global trong 1 file (.c/.cpp/.h) và truy cập biến này từ 1 file (.c/.cpp/.h) khác. Để làm điều này, biến phải được khai báo ở cả 2 file và từ khóa extern được thêm trong lần khai báo thứ 2.
+** Là biến được khai báo bên ngoài tất cả các hàm và có giá trị với tất cả các hàm trong chương trình. Tức là các hàm trong chương trình có thể sử dụng biến global để tính toán.
+** Biến global tồn tại đến khi nào chương trình kết thúc.
+
+** Có thể định nghĩa 1 biến global trong 1 file (.c/.cpp/.h) và truy cập biến này từ 1 file (.c/.cpp/.h) khác. Để làm điều này, biến phải được khai báo ở cả 2 file và từ khóa extern được thêm trong lần khai báo thứ 2.
 - Biến local 
-Biến local là xuất hiện trong phạm vi cụ thể.
-Biến local chỉ tồn tại trong hàm mà biến được khai báo
-Đôi khi, biến local được gọi là biến tự động (auto) bởi vì các biến được tự động sinh ra khi hàm được thực hiện và sẽ tự động biến mất khi kết thúc hàm.
+** Biến local là xuất hiện trong phạm vi cụ thể.
+** Biến local chỉ tồn tại trong hàm mà biến được khai báo
+** Đôi khi, biến local được gọi là biến tự động (auto) bởi vì các biến được tự động sinh ra khi hàm được thực hiện và sẽ tự động biến mất khi kết thúc hàm.
 Từ khóa auto được sử dụng để ám chỉ biến cục bộ.
--Biến static
-Biến static có thể là global hoặc local. Cả hai đều được khai báo với từ khóa static đi kèm.
-Biến local static là biến có thể duy trì giá trị từ lần gọi hàm thứ nhất đến các lần gọi hàm tiếp theo. Biến local static tồn tại đến khi chương trình kết thúc.
+- Biến static
+** Biến static có thể là global hoặc local. Cả hai đều được khai báo với từ khóa static đi kèm.
+** Biến local static là biến có thể duy trì giá trị từ lần gọi hàm thứ nhất đến các lần gọi hàm tiếp theo. Biến local static tồn tại đến khi chương trình kết thúc.
 Khi tạo 1 biến local static trong hàm, chúng ta nên khởi tạo giá trị cho chúng. Nếu không giá trị biến được gán mặc định bằng 0.
-Biến global static là biến global mà chỉ có thể truy cập từ file (.c/.cpp) mà biến đó được định nghĩa.
+** Biến global static là biến global mà chỉ có thể truy cập từ file (.c/.cpp) mà biến đó được định nghĩa.
 - Biến const
-Trong ngôn ngữ C, tiền xử lý #define được sử dụng để tạo biến với giá trị là hằng số.
-Trong ngôn ngữ C++, xuất hiện một số vấn đề: khi sử dụng #define, tiền xử lí sẽ nhảy thẳng vào source code và thay thế biến bằng giá trị đã định nghĩa. Vì biến #define chỉ tồn tại bên trong file mà nó được định nghĩa, có thể xảy ra trường hợp định nghĩa tên biến giống nhưng khác về giá trị.
+** Trong ngôn ngữ C, tiền xử lý #define được sử dụng để tạo biến với giá trị là hằng số.
+** Trong ngôn ngữ C++, xuất hiện một số vấn đề: khi sử dụng #define, tiền xử lí sẽ nhảy thẳng vào source code và thay thế biến bằng giá trị đã định nghĩa. Vì biến #define chỉ tồn tại bên trong file mà nó được định nghĩa, có thể xảy ra trường hợp định nghĩa tên biến giống nhưng khác về giá trị.
 Định nghĩa biến hằng trong C++, chủng ta nên sử dụng từ khóa const đi kèm.
 Khi sử dụng từ khóa const, phải khởi tạo giá trị ban đầu cho biến
-5. Truyền tham trị và tham biến cho hàm
--Khi truyền đối số kiểu tham trị, chương trình biên dịch sẽ copy giá trị của đối số để gán cho tham số của hàm (không tác động trực tiếp đến biến số truyền vào).
+1. Truyền tham trị và tham biến cho hàm
+- Khi truyền đối số kiểu tham trị, chương trình biên dịch sẽ copy giá trị của đối số để gán cho tham số của hàm (không tác động trực tiếp đến biến số truyền vào).
 - Phương pháp truyền tham biến là cách truyền địa chỉ của đối số cho các tham số tương ứng của hàm được gọi. Với cách truyền tham biến, giá trị của đối số truyền vào có thể bị thay đổi bởi việc gọi hàm.
 Truyền tham biến chia ra thành 2 loại : truyền con trỏ (dùng trong C và C++) , truyền tham chiếu (chỉ dùng trong C++)
 6. Sự khác nhau giữa const char* s và char* const s?
@@ -45,7 +47,7 @@ Ta không thể sử dụng trực tiếp dữ liệu mà con trỏ void trỏ t
 Tùy thuộc vào hệ điều hành là 64bit hay 32 bit mà con trỏ có kích thước khác nhau
 
 9. Sự khác nhau giữa const và volatite?
--Biến volatile là rất cần thiết để tránh những lỗi sai khó phát hiện do tính năng optimization của compiler. Trong thực tế, có 3 loại biến mà giá trị có thể bị thay đổi như vậy:Memory-mapped peripheral registers (thanh ghi ngoại vi có ánh xạ đến ô nhớ); Biến toàn cục được truy xuất từ các tiến trình con xử lý ngắt (interrupt service routine); Biến toàn cục được truy xuất từ nhiều tác vụ trong một ứng dụng đa luồng.
+- Biến volatile là rất cần thiết để tránh những lỗi sai khó phát hiện do tính năng optimization của compiler. Trong thực tế, có 3 loại biến mà giá trị có thể bị thay đổi như vậy:Memory-mapped peripheral registers (thanh ghi ngoại vi có ánh xạ đến ô nhớ); Biến toàn cục được truy xuất từ các tiến trình con xử lý ngắt (interrupt service routine); Biến toàn cục được truy xuất từ nhiều tác vụ trong một ứng dụng đa luồng.
 
 - Const được sử dụng để định nghĩa một hằng số trong chương trình.
 
@@ -94,6 +96,11 @@ Khi kế thừa nếu hàm hủy ko phải hàm ảo. Khi gọi hàm hủy, là 
 2.   No Static member init
 3.   Default and Deleted function
 4.   Move semantics
+
+- Giúp loại bỏ những chi phí vô ích khi thực hiện copy dữ liệu từ đối tượng tạm.
+- Loại bỏ những chi phí "vô hình" khi hàm trả về một đối tượng.
+- Tối ưu hóa việc copy trong một số trường hợp nhất định, khi nắm rõ vòng đời của đối tượng.
+- Giúp chúng ta thực hiện việc "chuyển quyền sở hữu".
 5.  Friend
 * Nếu một hàm được định nghĩa là một hàm bạn (Friend function) trong C++, thì dữ liệu được bảo vệ (protected) và riêng tư (private) của một lớp có thể được truy cập bằng cách sử dụng hàm.
 * Một hàm có thể là bạn của nhiều class cùng một lúc.
@@ -146,3 +153,21 @@ Adapter ở giữa gắn kết các lớp làm việc với nhau dù cho có nh�
 
 -  Một thực thể có thể gọi được. Đó có thể là hàm, hàm lambda hoặc đối tượng hàm.
 - Một trạng thái chia sẻ lưu trữ giá trị được trả về hoặc ném ngoại lệ bằng cách gọi hàm callback.
+
+24. vector
+
+* std::vector cung cấp chức năng mảng động có khả năng tự xử lý việc quản lý bộ nhớ của chính nó. Điều này nghĩa là bạn có thể tạo ra những mảng có độ dài được thiết lập tại runtime (thời điểm chương trình chạy), mà không cần phải cấp phát và giải phóng bộ nhớ một cách rõ ràng/tường minh bằng toán tử new và delete. std::vector tồn tại trong header <vector>.
+* Khi một biến vector nằm ngoài phạm vi đoạn comà chương trình đang chạy (goes out of scope), nó sẽ tự động giải phóng những phần bộ nhớ mà nó kiểm soát (nếu cần). Điều này không chỉ tiện dụng (bởi vì bạn không phải tự giải phóng bộ nhớ), mà nó còn giúp ngăn ngừa lỗi rò rỉ bộ nhớ (memory leaks)
+* Không giống như mảng động được tích hợp sẵn của C++, cái mà không biết được độ dài của mảng mà nó đang trỏ tới là bao nhiêu, std::vectors tự theo dõi độ dài của chính nó. Chúng ta có thể lấy được độ dài của vector thông qua hàm size():
+
+25. set
+
+* Set là container lưu các phần tử duy nhất tuân theo 1 thứ tự đặc biệt. Giá trị của mỗi phần tử luôn là hằng số, (không thể modify được), chỉ có thể insert hoặc remove phần tử khỏi container set.
+* Mỗi phần tử trong cùng một std::set là duy nhất (hay unique). Điều này có nghĩa rằng nếu bạn không thể lưu trữ hai phần tử có giá trị như nhau trong cùng một std::set.
+* Tất cả các phần trử trong cùng một std::set phải thuộc cùng một kiểu dữ liệu.
+
+26. Tại sao dùng con trỏ
+
+- Cần để control thời gian tạo và hủy biến, ví dụ: out of scope nhưng ko huyr biến
+- Cần khi allocate bộ nhớ, tránh tràn stack. 
+- Dynamic allocation

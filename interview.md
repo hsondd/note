@@ -100,7 +100,7 @@ Khi kế thừa nếu hàm hủy ko phải hàm ảo. Khi gọi hàm hủy, là 
 - Giúp loại bỏ những chi phí vô ích khi thực hiện copy dữ liệu từ đối tượng tạm.
 - Loại bỏ những chi phí "vô hình" khi hàm trả về một đối tượng.
 - Tối ưu hóa việc copy trong một số trường hợp nhất định, khi nắm rõ vòng đời của đối tượng.
-- Giúp chúng ta thực hiện việc "chuyển quyền sở hữu".
+-- Giúp chúng ta thực hiện việc "chuyển quyền sở hữu".
 5.  Friend
 * Nếu một hàm được định nghĩa là một hàm bạn (Friend function) trong C++, thì dữ liệu được bảo vệ (protected) và riêng tư (private) của một lớp có thể được truy cập bằng cách sử dụng hàm.
 * Một hàm có thể là bạn của nhiều class cùng một lúc.

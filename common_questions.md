@@ -9,8 +9,8 @@
 # 3. Phân biệt Syntax-error, Runtime-error and Logical-error?
 
 - Syntax-error: Lỗi cú pháp được phát hiện ngay khi biên dịch chương trình. Trình biên dịch sẽ thông báo lỗi tại cửa sổ Output
-Runtime-error: Chương trình đã được biên dịch thành công, gặp lỗi khi chạy chương trình do đầu vào hoặc đầu ra có giá trị không mong muốn
-Logical-error: Chương trình đã được biên dịch và chạy không gặp lỗi Runtime-error. Nhưng kết quả đầu ra không đúng theo yêu cầu do logic xử lý bài toán bị sai.
+- Runtime-error: Chương trình đã được biên dịch thành công, gặp lỗi khi chạy chương trình do đầu vào hoặc đầu ra có giá trị không mong muốn
+- Logical-error: Chương trình đã được biên dịch và chạy không gặp lỗi Runtime-error. Nhưng kết quả đầu ra không đúng theo yêu cầu do logic xử lý bài toán bị sai.
 
 # 4. Phân biệt biến Local, Global, Extern, Static và Const
 - Biến global
@@ -36,7 +36,7 @@ Logical-error: Chương trình đã được biên dịch và chạy không gặ
 # 5. Truyền tham trị và tham biến cho hàm
 - Khi truyền đối số kiểu tham trị, chương trình biên dịch sẽ copy giá trị của đối số để gán cho tham số của hàm (không tác động trực tiếp đến biến số truyền vào).
 - Phương pháp truyền tham biến là cách truyền địa chỉ của đối số cho các tham số tương ứng của hàm được gọi. Với cách truyền tham biến, giá trị của đối số truyền vào có thể bị thay đổi bởi việc gọi hàm.
-Truyền tham biến chia ra thành 2 loại : truyền con trỏ (dùng trong C và C++) , truyền tham chiếu (chỉ dùng trong C++)
+    - Truyền tham biến chia ra thành 2 loại : truyền con trỏ (dùng trong C và C++) , truyền tham chiếu (chỉ dùng trong C++)
 
 # 6. Sự khác nhau giữa const char* s và char* const s?
 - Hằng con trỏ – Constant pointer: <Kiểu dữ liệu> * const <Tên con trỏ> = <Địa chỉ khởi tạo> ;
@@ -54,7 +54,7 @@ Ta không thể sử dụng trực tiếp dữ liệu mà con trỏ void trỏ t
 Tùy thuộc vào hệ điều hành là 64bit hay 32 bit mà con trỏ có kích thước khác nhau
 
 # 9. Sự khác nhau giữa const và volatite?
-- Biến volatile là rất cần thiết để tránh những lỗi sai khó phát hiện do tính năng optimization của compiler. Trong thực tế, có 3 loại biến mà giá trị có thể bị thay đổi như vậy:Memory-mapped peripheral registers (thanh ghi ngoại vi có ánh xạ đến ô nhớ); Biến toàn cục được truy xuất từ các tiến trình con xử lý ngắt (interrupt service routine); Biến toàn cục được truy xuất từ nhiều tác vụ trong một ứng dụng đa luồng.
+- Biến volatile là rất cần thiết để tránh những lỗi sai khó phát hiện do tính năng optimization của compiler. Trong thực tế, có 3 loại biến mà giá trị có thể bị thay đổi như vậy: Memory-mapped peripheral registers (thanh ghi ngoại vi có ánh xạ đến ô nhớ); Biến toàn cục được truy xuất từ các tiến trình con xử lý ngắt (interrupt service routine); Biến toàn cục được truy xuất từ nhiều tác vụ trong một ứng dụng đa luồng.
 
 - Const được sử dụng để định nghĩa một hằng số trong chương trình.
 
@@ -223,4 +223,16 @@ Adapter ở giữa gắn kết các lớp làm việc với nhau dù cho có nh�
 - weak_ptr đại diện cho quyền sở hữu yếu, nghĩa là đối tượng sở hữu tài nguyên bằng weak_ptr chỉ có quyền sử dụng chứ không có quyền thu hồi tài nguyên. Nói cách khác, cơ chế reference counting chỉ dựa vào số lượng shared_ptr đang trỏ tới tài nguyên, chứ không quan tâm tới tài nguyên đó đang được trỏ tới bởi bao nhiêu weak_ptr, dù đang có 5 weak_ptr đang trỏ tới tài nguyên đó, nhưng không còn shared_ptr nào trỏ tới nữa thì tài nguyên đó vẫn bị thu hồi.
     - weak_ptr cũng có 1 điểm yếu rất lớn khi sử dụng, mỗi lần sử dụng tài nguyên mà weak_ptr tham chiếu đến, cần phải thực hiện câu lệnh lock() để tạo ra 1 shared_ptr trỏ tới tài nguyên đó
 
+# 34. struct vs class
+- Thành viên class mặc định là private, của struct mặc định là public
+- Kế thừa struct từ 1 class/struct, mặc định là public. Còn khi kế thừa 1 class, mặc đinh là private
+- class có thể null nhưng struct thì ko
+- Bộ nhớ struct được allocate trên stack, còn class là trên heap
+- Class yêu cầu có hàm tạo hàm hủy, struct thì ko
+- class hỗ trợ đa hình
 
+# 35. Pointer vs reference
+- con trỏ có thể ko cần giá trị khởi tạo, tham chiếu cần xác định giá trị ngay lúc khởi tạo
+- con trỏ có thể trỏ đến null, tham chiếu thì ko
+- không thể thay đổi tham chiếu đến 1 biến khác, Con trỏ có thể trỏ đến bất kỳ giá trị nào sau khi khai báo
+- con trỏ có thể sử dụng vs các phép toán số học, tham chiếu thì ko

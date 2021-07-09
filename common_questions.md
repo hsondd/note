@@ -1,5 +1,6 @@
 -------------------------------------------------------------CPP--------------------------------------------------------------------
-# 1. Namespace là một cơ chế trong C++, cho phép ta nhóm các thực thể (class, object, function…) có liên quan thành từng nhóm khác nhau theo tên, mà theo đó tên của mọi thực thể trong mỗi namespace đều được gắn thêm tên của namespace đó như tiền tố.
+# 1. Namespace
+- là một cơ chế trong C++, cho phép ta nhóm các thực thể (class, object, function…) có liên quan thành từng nhóm khác nhau theo tên, mà theo đó tên của mọi thực thể trong mỗi namespace đều được gắn thêm tên của namespace đó như tiền tố.
 
 # 2. Từ khóa volatile làm gì
 - Việc khai báo biến có thuộc tính volatile là rất cần thiết nhằm tránh các lỗi phát sinh ngoài ý muốn khi tính năng optimization của compiler được bật. Volatile để chỉ một biến có thể bị thay đổi giá trị một cách "bất thường". Có nghĩa là giá trị của biến có thể bị thay đổi mà không được báo trước
@@ -102,11 +103,34 @@ Khi kế thừa nếu hàm hủy ko phải hàm ảo. Khi gọi hàm hủy, là 
 # 17.   No Static member init
 # 18.   Default and Deleted function
 # 19.   Move semantics
+- Tác dụng
+  - Giúp loại bỏ những chi phí vô ích khi thực hiện copy dữ liệu từ đối tượng tạm.
+  - Loại bỏ những chi phí "vô hình" khi hàm trả về một đối tượng.
+  - Tối ưu hóa việc copy trong một số trường hợp nhất định, khi nắm rõ vòng đời của đối tượng.
+  - Giúp chúng ta thực hiện việc "chuyển quyền sở hữu".
 
-- Giúp loại bỏ những chi phí vô ích khi thực hiện copy dữ liệu từ đối tượng tạm.
-- Loại bỏ những chi phí "vô hình" khi hàm trả về một đối tượng.
-- Tối ưu hóa việc copy trong một số trường hợp nhất định, khi nắm rõ vòng đời của đối tượng.
-- Giúp chúng ta thực hiện việc "chuyển quyền sở hữu".
+
+- Temporary object
+    - Giá trị trung gian trong quá trình tính toán của biểu thức. Ví dụ: int a = 4 + (3 * b);
+    Biến trả về từ hàm.
+    Ví dụ: std::vector<int> sortedArray = CreateSortedArray(inputedArray);
+    - Biến trả về từ hàm.
+    Ví dụ: std::vector<int> sortedArray = CreateSortedArray(inputedArray);
+    - Biến được khởi tạo nhưng không đặt tên. Trong đoạn code ví dụ sau ta tạo ra đối tượng string để chứa giá trị "stdio.vn" và "www.stdio.vn" nhưng vì không được đặt tên nên 2 đối tượng này là 2 đối tượng tạm.
+    if (string("stdio.vn") == string("www.stdio.vn"));
+
+- lvalue and rvalue
+    - lvalue là giá trị có thể gán được, còn rvalue là giá trị ta không thể gán được hoặc rvalue chỉ có thể nằm bên phải dấu =
+    - Có thể thực hiện lấy địa chỉ của lvalue sử dụng toán tử &, nhưng không thể lấy địa chỉ của rvalue.
+    - Các lvalue thường là những biến có tên, các rvalue thường là những biến không có tên.
+    - Hầu hết các đối tượng tạm là rvalue, và hầu hết các rvalue là đối tượng tạm.
+    - Các đối tượng tạm được tạo ra trong quá trình tính toán biểu thức là rvalue.
+    - Khi một hàm trả về giá trị của một biến thì giá trị trả về đó là một rvalue (Vì chương trình phải tạo ra một đối tượng tạm để chứa giá trị của biến mà nó trả về).
+    - lvalue reference có thể dùng để tham chiếu đến một lvalue, nhưng không thể dùng để tham chiếu đến một rvalue.
+    - Trong C++ lại cho phép dùng const lvalue reference để tham chiếu đến rvalue.
+- Copy semantics là thực hiện copy trạng thái (hay dữ liệu) của đối tượng này sang đối tượng khác, sau đó cả 2 đối tượng này sẽ có trạng thái (hay dữ liệu) như nhau.
+
+
 
 
 # 20.  Friend
@@ -179,3 +203,24 @@ Adapter ở giữa gắn kết các lớp làm việc với nhau dù cho có nh�
 - Cần để control thời gian tạo và hủy biến, ví dụ: out of scope nhưng ko huyr biến
 - Cần khi allocate bộ nhớ, tránh tràn stack. 
 - Dynamic allocation
+
+# 33. Smart Pointer
+
+- Smart pointer là 1 loại dữ liệu mới bổ sung thêm các khả năng regular pointer, kiểm tra truy xuất ngoài vùng được cấp phát, ... Để đạt được điều này, thiết kế C++ đã tạo ra các đối tượng để đóng gói các regular pointer. Để các đối tượng này hành xử như 1 regular pointer thật sự, các toán tử đặc trưng của pointer thông thường như *  và -> đều được override lại trong các đối tượng này. Nhờ vậy mà nó trông rất giống các regular pointer, và có thể sử dụng nó như là 1 regular pointer thật sự. Ngoài ra thì nó còn được định nghĩa để tự động xử lý các vấn đề liên quan đến quản lý bộ nhớ tự động.. nó cung cấp hàm destructor được tự động gọi đến khi đối tượng của class đó đi ra khỏi phạm vi khối lệnh chứa nó. Vậy, nếu chúng ta cấp phát vùng nhớ cho nó trong phần khởi tạo (constructor), vùng nhớ đó sẽ được đảm bảo giải phóng khi đối tượng smart pointer bị hủy.
+
+- Cách mà các smart pointer trong C++ hoạt động để thực hiện tự động quản lý tài nguyên, đều dựa vào khái niệm quyền sở hữu tài nguyên.
+
+- Trong C++ có 3 loại smart pointer chính là:
+
+    - unique_ptr: đại diện cho quyền sở hữu duy nhất, nghĩa là tài nguyên mà unique_ptr quản lý chỉ có thể được sở hữu bởi duy nhất 1 đối tượng.
+    - shared_ptr: đại diện cho quyền sở hữu chia sẻ, nghĩa là tài nguyên mà shared_ptr quản lý có thể được sở hữu bởi nhiều đối tượng.
+    - weak_ptr: đại diện cho quyền sở hữu yếu, nghĩa là đối tượng nắm trong tay weak_ptr trỏ tới 1 tài nguyên chỉ có quyền được sử dụng tài nguyên đó, chứ không có quyền hủy đi tài nguyên.
+
+- unique_ptr trong C++ đại diện cho quyền sở hữu duy nhất, nghĩa là tài nguyên mà unique_ptr trỏ tới chỉ được sở hữu bởi 1 đối tượng, và trên lý thuyết 1 tài nguyên chỉ được trỏ tới bởi duy nhất 1 unique_ptr. Do đó không thể thực hiện gán thông thường (bằng copy constructor hoặc toán tử copy assignment), phai sử dụng move constructor hoặc toán tử move assignment.
+- shared_ptr sẽ đại diện cho quyền sở hữu chia sẻ. Nghĩa là tài nguyên mà shared_ptr trỏ tới là tài nguyên chia sẻ, có thể được sở hữu bởi nhiều đối tượng cùng 1 lúc. Nhờ shared_ptr mà có thể dễ dàng quản lý các tài nguyên được sử dụng bởi nhiều đối tượng 1 cách dễ dàng. Khi sử dụng shared_ptr với các loại tài nguyên này, hoàn toàn không còn cần phải quan tâm việc thu hồi nó.
+    - No sử dụng cơ chế reference counting để đảm bảo khi không còn shared_ptr quản lý tài nguyên đó nữa thì tài nguyên sẽ bị thu hồi, và sử dụng biến atomic để bảo đảm thread-safe khi tài nguyên đó được sử dụng bởi các đối tượng nằm ở các thread khác nhau.
+
+- weak_ptr đại diện cho quyền sở hữu yếu, nghĩa là đối tượng sở hữu tài nguyên bằng weak_ptr chỉ có quyền sử dụng chứ không có quyền thu hồi tài nguyên. Nói cách khác, cơ chế reference counting chỉ dựa vào số lượng shared_ptr đang trỏ tới tài nguyên, chứ không quan tâm tới tài nguyên đó đang được trỏ tới bởi bao nhiêu weak_ptr, dù đang có 5 weak_ptr đang trỏ tới tài nguyên đó, nhưng không còn shared_ptr nào trỏ tới nữa thì tài nguyên đó vẫn bị thu hồi.
+    - weak_ptr cũng có 1 điểm yếu rất lớn khi sử dụng, mỗi lần sử dụng tài nguyên mà weak_ptr tham chiếu đến, cần phải thực hiện câu lệnh lock() để tạo ra 1 shared_ptr trỏ tới tài nguyên đó
+
+

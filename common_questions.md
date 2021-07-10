@@ -145,6 +145,14 @@ Khi kế thừa nếu hàm hủy ko phải hàm ảo. Khi gọi hàm hủy, là 
 Khi class chỉ cần sử dụng 1 và duy nhất 1 instance
 
 Cung cấp một điểm truy cập toàn cục tới instance này thay vì qua constructor
+- Lợi ích
+  - Ai cũng có thể truy cập vào instance của singleton class, gọi nó ở bất cứ đâu
+  - Dữ liệu không thay đổi bởi chỉ có một instance duy nhất, có thể duy trì dữ liệu sau khi đổi scene
+  - Singleton class hỗ trợ interface trong khi static class thì lại không, đây là sự khác biệt cần phải xác định để tạo static class hay singleton class.
+  - Hỗ trợ kế thừa, static class thì không hỗ trợ kế thừa.
+- Nhược điểm
+  - Không sử dụng được đa hình
+  - 
 
 # 22. Observe pattern
 
@@ -236,3 +244,6 @@ Adapter ở giữa gắn kết các lớp làm việc với nhau dù cho có nh�
 - con trỏ có thể trỏ đến null, tham chiếu thì ko
 - không thể thay đổi tham chiếu đến 1 biến khác, Con trỏ có thể trỏ đến bất kỳ giá trị nào sau khi khai báo
 - con trỏ có thể sử dụng vs các phép toán số học, tham chiếu thì ko
+
+# 36. Memory leak
+- Rò rỉ bộ nhớ xảy ra trong C ++ khi cấp phát bộ nhớ trên heap bằng cách sử dụng từ khóa new() và quên hủy bằng cách sử dụng hàm delete () hoặc toán tử delete []. 
